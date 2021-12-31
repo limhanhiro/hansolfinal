@@ -1,0 +1,72 @@
+.space-list img{
+	width: 100%;
+	margin-bottom: 20px;
+	border-radius: 20px; 
+}
+.space-list p>input{
+	border: none;
+	background: #ffffff;
+}
+#update-btn{
+	border : 1px solid #064663; 
+	float: right;
+	margin-right: 10px;
+	margin-bottom: 10px;
+	margin-top: 30px;
+}
+#del-btn:hover{
+	border : 1px solid white;
+	color : #ffffff;
+	background: #064663 ;
+}
+#del-btn{
+	border : 1px solid #064663; 
+	float: right;
+	margin-right: 10px;
+	margin-bottom: 10px;
+	margin-top: 30px;
+}
+#update-btn:hover{
+	border : 1px solid white;
+	background: #064663;
+	color : #ffffff;
+}
+#insert-btn{
+	border : 2px solid #064663; 
+	width : 250px;
+	height : 50px;
+	margin-bottom : 50px;
+	margin-left: 40%;
+}
+#insert-btn:hover{
+	border : 1px solid white;
+	background: #064663;
+	color: #ffffff;	
+}
+#info{
+	font-weight : bold;
+	float: right;
+	color: #064663;
+	margin-bottom: 30px;
+}
+#info:hover{
+	font-weight : bold;
+	color: #e79b36;
+}
+.space-list{
+	border-radius : 30px;
+	float: left;
+	border : 1px solid #064663 ;
+	width :  450px;
+	margin-left: 80px;
+	margin-bottom: 50px;
+	padding: 30px;
+}
+.space-list p{
+	margin: 10px;
+	border-bottom: 1px solid #064663;
+	margin-top: 15px;
+}
+.info-img{
+	height: 388px;
+}

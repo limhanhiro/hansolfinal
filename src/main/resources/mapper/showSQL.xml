@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="show">
+	<select id="showList" resultType="show">
+		select
+			show_no as showNo,
+			show_name as showName,
+			show_start as showStart,
+			show_end as showEnd,
+			show_hall as showHall,
+			filepath
+		from show where show_end>sysdate order by 1 desc
+	</select>
+	<select id="selectOneShow" parameterType="_int" resultMap="s">
+		select * from show where show_no=#{showNo}
+	</select>
+	<select id="starAvg" parameterType="_int" resultType="_double">
+		select nvl(avg(star),0) from show_review where show_no = #{showNo}
+	</select>
+	<insert id="insertShow" parameterType="show">
+		insert into show values(show_seq.nextval, #{showName}, #{showStart}, #{showEnd}, #{showTime}, #{showAge}, #{showContent}, #{showPrice}, #{showSeat}, #{filepath}, #{showHall})
+	</insert>
+	<delete id="deleteShow" parameterType="_int">
+		delete from show where show_no=#{showNo}
+	</delete>
+	<update id="updateShow" parameterType="show">
+		update show set show_name=#{showName}, show_start=#{showStart}, show_end=#{showEnd}, show_time=#{showTime}, show_age=#{showAge}, show_content=#{showContent}, show_price=#{showPrice}, filepath=#{filepath}, show_hall=#{showHall} where show_no=#{showNo}
+	</update>
+	<select id="selectLastList" resultType="show">
+	<![CDATA[
+		select
+			show_no as showNo,
+			show_name as showName,
+			show_start as showStart,
+			show_end as showEnd,
+			show_hall as showHall,
+			filepath
+		from show where show_end<sysdate order by 1 desc
+		]]>
+	</select>
+	<!-- 관람평 -->
+	<select id="selectReviewList" parameterType="_int" resultType="sReview">
+		select
+			review_no as reviewNo,
+			show_no as showNo,
+			review_writer as reviewWriter,
+			review_content as reviewContent,
+			star,
+			review_date as reviewDate
+		from show_review where show_no=#{showNo} order by 1 desc
+	</select>
+	<delete id="deleteReview" parameterType="sReview">
+		delete from show_review where review_no=#{reviewNo} and show_no=#{showNo}
+	</delete>
+	<insert id="insertReview" parameterType="sReview">
+		insert into show_review values(sreview_seq.nextval, #{showNo}, #{reviewWriter}, #{reviewContent}, #{star}, to_char(sysdate, 'yyyy-mm-dd'), #{reservNo})
+	</insert>
+	<update id="updateReview" parameterType="sReview">
+		update show_review set review_content=#{reviewContent} where review_no=#{reviewNo} and show_no=#{showNo}
+	</update>
+	<select id="selectOneReview" parameterType="_int" resultType="sReview">
+		select
+			review_no as reviewNo
+		from show_review where reserv_no=#{reservNo}
+	</select>
+	<!-- 예약 -->
+	<insert id="insertReserv" parameterType="sReserv">
+		insert into show_reserv values(sreserv_seq.nextval, #{showNo}, #{memberId}, #{showDate}, to_char(sysdate, 'yyyy-mm-dd'), 0, 0, 0)
+		<selectKey resultType="_int" order="AFTER" keyProperty="reservNo">
+			select max(reserv_no) from show_reserv
+		</selectKey>
+	</insert>
+	<insert id="insertSeat" parameterType="seat">
+		insert into seat values(seat_seq.nextval, #{reservNo}, #{showNo}, #{showDate}, #{seatNo}, #{seatPrice}, 0)
+	</insert>
+	<delete id="deleteReserv" parameterType="_int">
+		delete from show_reserv where reserv_no=#{reservNo}
+	</delete>
+	<delete id="deleteSeat" parameterType="_int">
+		delete from seat where reserv_no=#{reservNo}
+	</delete>
+	<select id="selectReserv" parameterType="_int" resultType="sReserv">
+		select
+			show_no as showNo,
+			member_id as memberId,
+			(select show_name from show where show_no=R.show_no) as showName,
+			show_date as showDate,
+			reserv_date as reservDate,
+			reserv_cancel as reservCancel
+		from show_reserv R where reserv_no=#{reservNo}
+	</select>
+	<select id="selectSeatList" parameterType="_int" resultType="seat">
+		select
+			seat_no as seatNo,
+			seat_price as seatPrice,
+			seat_level as seatLevel
+		from seat where reserv_no=#{reservNo} order by 1
+	</select>
+	<select id="selectAllSeat" parameterType="sReserv" resultType="seat">
+		select
+			seat_no as seatNo
+		from seat where show_no=#{showNo} and show_date=#{showDate}
+	</select>
+	<update id="updateReserv" parameterType="_int">
+		update show_reserv set reserv_pay=1 where reserv_no=#{reservNo}
+	</update>
+	<delete id="payCancel">
+		delete from show_reserv where reserv_pay=0
+	</delete>
+	<select id="selectOneSeat" parameterType="seat" resultType="string">
+		select
+			seat_no
+		from seat where show_no=#{showNo} and show_date=#{showDate} and seat_no=#{seatNo}
+	</select>
+	<select id="selectReservList" parameterType="string" resultType="sReserv">
+		select
+            reserv_no as reservNo,
+            R.show_no as showNo,
+			(select show_name from show where show_no=R.show_no) as showName,
+			R.show_date as showDate,
+			R.reserv_date as reservDate,
+			R.reserv_cancel as reservCancel,
+			R.reserv_pay as reservPay,
+			R.review_status as reviewStatus,
+            count(seat_no) as ticketNum,
+            sum(seat_price) as payment
+		from show_reserv R left join seat S using(reserv_no)
+        where R.member_id=#{memberId}
+        group by
+            reserv_no,
+			R.show_no,
+			R.show_date,
+			R.reserv_date,
+			R.reserv_cancel,
+			R.reserv_pay,
+			R.review_status
+        order by 1 desc
+	</select>
+	<update id="reservCancel" parameterType="_int">
+		update show_reserv set reserv_cancel=1 where reserv_no=#{reservNo}
+	</update>
+	<select id="checkReserv" parameterType="sReserv" resultType="sReserv">
+		select
+            reserv_no as reservNo,
+            member_id as memberId,
+			R.reserv_date as reservDate,
+            count(seat_no) as ticketNum,
+            sum(seat_price) as payment
+		from show_reserv R left join seat S using(reserv_no)
+        where R.show_date = #{showDate} and R.show_no=#{showNo} and R.reserv_pay=1 and R.reserv_cancel=0
+        group by
+            reserv_no,
+            member_id,
+			R.reserv_date
+        order by 1 desc
+	</select>
+	<update id="updateReviewStatus" parameterType="_int">
+		update show_reserv set review_status=1 where reserv_no=#{reservNo}
+	</update>
+	
+	<resultMap type="show" id="s">
+		<result column="show_no" property="showNo"/>
+		<result column="show_name" property="showName"/>
+		<result column="show_start" property="showStart"/>
+		<result column="show_end" property="showEnd"/>
+		<result column="show_time" property="showTime"/>
+		<result column="show_age" property="showAge"/>
+		<result column="show_content" property="showContent"/>
+		<result column="show_price" property="showPrice"/>
+		<result column="show_seat" property="showSeat"/>
+		<result column="filepath" property="filepath"/>
+		<result column="show_hall" property="showHall"/>
+	</resultMap>
+</mapper>

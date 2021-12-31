@@ -1,0 +1,243 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="academy">
+  <insert id="academyInsert" parameterType="ac">
+		insert 
+			into academy
+			values(academy_seq.nextval,#{academyTitle},#{academyStart},
+			#{academyEnd},#{academyPhoto},#{academyTeacher},#{academyPlace},#{academyPrice},
+			#{academyDetail},#{academyCategory},0)
+	</insert>
+	<select id="acadeyTotal" resultType="_int">
+  		select count(*) from academy where academy_end > sysdate and academy_cancel = 0
+  	</select>
+  	<select id="academyList" parameterType="ap" resultType="ac">
+		  		select 
+		  			nn.academy_no as academyNo,
+		  			nn.academy_title as academyTitle,
+		  			nn.academy_start as academyStart,
+		  			nn.academy_end as academyEnd,
+		  			nn.academy_photo as academyPhoto,
+		  			nn.academy_teacher as academyTeacher,
+		  			nn.academy_place as academyPlace,
+		  			nn.academy_price as academyPrice,
+		  			nn.academy_detail as academyDetail,
+		  			nn.academy_category as academyCategory,
+		  			nn.academy_cancel as academyCancel
+		  		from (select rownum as rnum,n.* from(select * from  academy where academy_end >= to_char(sysdate, ('yyyy-mm-dd')) and academy_cancel = 0 order by academy_no desc)n)nn where rnum between  #{start} and #{end}
+	</select>
+	<select id ="selectCategoryList" parameterType="ap" resultType="ac">	
+  				select 
+		  			nn.academy_no as academyNo,
+		  			nn.academy_title as academyTitle,
+		  			nn.academy_start as academyStart,
+		  			nn.academy_end as academyEnd,
+		  			nn.academy_photo as academyPhoto,
+		  			nn.academy_teacher as academyTeacher,
+		  			nn.academy_place as academyPlace,
+		  			nn.academy_price as academyPrice,
+		  			nn.academy_detail as academyDetail,
+		  			nn.academy_category as academyCategory,
+		  			nn.academy_cancel as academyCancel
+		  		from (select rownum as rnum,n.* from(select * from  academy where academy_category=#{category} and academy_end >= to_char(sysdate, ('yyyy-mm-dd')) and academy_cancel = 0 order by academy_no desc)n)nn where rnum between  #{start} and #{end}
+	</select>
+  	<select id="selectOneAcademy" parameterType="_int" resultType="ac">
+  	 	select 
+  			academy_no as academyNo,
+  			academy_title as academyTitle,
+  			academy_start as academyStart,
+  			academy_end as academyEnd,
+  			academy_photo as academyPhoto,
+  			academy_teacher as academyTeacher,
+  			academy_place as academyPlace,
+  			academy_price as academyPrice,
+  			academy_detail as academyDetail,
+  			academy_category as academyCategory,
+  			academy_cancel as academyCancel
+  		from academy where academy_no = #{academyNo}
+  	</select>
+  	<select id="searchAcademyList" parameterType="ap" resultType="ac">
+  		select 
+		  			nn.academy_no as academyNo,
+		  			nn.academy_title as academyTitle,
+		  			nn.academy_start as academyStart,
+		  			nn.academy_end as academyEnd,
+		  			nn.academy_photo as academyPhoto,
+		  			nn.academy_teacher as academyTeacher,
+		  			nn.academy_place as academyPlace,
+		  			nn.academy_price as academyPrice,
+		  			nn.academy_detail as academyDetail,
+		  			nn.academy_category as academyCategory,
+		  			nn.academy_cancel as academyCancel
+	from (select rownum as rnum,n.* from(select * from  academy where academy_title like '%'||#{category}||'%' or academy_detail like '%'||#{category}||'%' and academy_end >= to_char(sysdate, ('yyyy-mm-dd')) and academy_cancel = 0  order by academy_no desc)n)nn 
+	where rnum between  #{start} and #{end} 
+  	</select>
+  	<insert id="academyCredit" parameterType="acp">
+		insert
+			into payment
+			values(#{paymentNo},#{paymentSelect},#{academyNo},0,#{paymentPrice},
+			to_char(sysdate,'YYYY-MM-DD'),0,#{paymentQuantity},#{academyEnd},#{memberNo},0)
+	</insert>
+	<select id="academyCategory" resultType="acc">
+		select distinct(academy_category) as academyCategory from academy where academy_end >= to_char(sysdate, ('yyyy-mm-dd'))
+	</select>
+	<select id="totalCountAcademy" parameterType="string" resultType="_int">
+		select count(*) from academy where academy_category=#{category} and academy_end >= to_char(sysdate, ('yyyy-mm-dd'))
+	</select>
+	<select id="searchAcademyTotal" parameterType="string" resultType="_int">
+		select count(*) from academy where academy_title like '%'||#{keyWord}||'%' or academy_detail like '%'||#{keyWord}||'%' and academy_end >= to_char(sysdate, ('yyyy-mm-dd'))
+	</select>
+	<update id="academyUpdate" parameterType="ac">
+		update academy set academy_title = #{academyTitle},academy_start = #{academyStart}, academy_end = #{academyEnd}, academy_photo=#{academyPhoto}, academy_teacher=#{academyTeacher}
+			,academy_place = #{academyPlace}, academy_price=#{academyPrice},academy_detail=#{academyDetail},academy_category=#{academyCategory} where academy_no=#{academyNo}
+	</update>
+	<select id="academyAdminList" resultType="ac">
+	<![CDATA[
+		select 
+  			academy_no as academyNo,
+  			academy_title as academyTitle,
+  			academy_start as academyStart,
+  			academy_end as academyEnd,
+  			academy_photo as academyPhoto,
+  			academy_teacher as academyTeacher,
+  			academy_place as academyPlace,
+  			academy_price as academyPrice,
+  			academy_detail as academyDetail,
+  			academy_category as academyCategory,
+  			academy_cancel as academyCancel
+  		from academy 
+  			where academy_end >= to_char(sysdate, ('yyyy-mm-dd')) and academy_cancel = 0 order by 1 desc
+  	]]>	
+	</select>
+	<select id="academyAdminListLast" resultType="ac">
+		<![CDATA[
+		select 
+  			academy_no as academyNo,
+  			academy_title as academyTitle,
+  			academy_start as academyStart,
+  			academy_end as academyEnd,
+  			academy_photo as academyPhoto,
+  			academy_teacher as academyTeacher,
+  			academy_place as academyPlace,
+  			academy_price as academyPrice,
+  			academy_detail as academyDetail,
+  			academy_category as academyCategory,
+  			academy_cancel as academyCancel
+  		from academy
+  			where academy_end < to_char(sysdate, ('yyyy-mm-dd')) and academy_cancel = 0 order by 1 desc
+  	]]>	
+	</select>
+	<select id="academyAdminListCancel" resultType="ac">
+		<![CDATA[
+		select 
+  			academy_no as academyNo,
+  			academy_title as academyTitle,
+  			academy_start as academyStart,
+  			academy_end as academyEnd,
+  			academy_photo as academyPhoto,
+  			academy_teacher as academyTeacher,
+  			academy_place as academyPlace,
+  			academy_price as academyPrice,
+  			academy_detail as academyDetail,
+  			academy_category as academyCategory,
+  			academy_cancel as academyCancel
+  		from academy
+  			where academy_cancel = 1 order by 1 desc
+  	]]>	
+	</select>
+	<select id="countingStar" parameterType="_int" resultType="_int">
+		select nvl(sum(payment_quantity),0) from payment where academy_no=#{academyNo} and payment_cancel=0
+	</select>
+	<select id="selecAcademtPaymentList" parameterType="_int" resultType="acp">
+	select 
+			payment_no as paymentNo,
+			payment_select as paymenySelect,
+			academy_no as academyNo,
+			exhibition_no as exhibitionNo,
+			payment_price as paymentPrice,
+			payment_date as paymentDate,
+			payment_cancel as paymentCancel,
+			payment_quantity as paymentQuantity,
+			book_date as bookDate,
+			member_no as memberNo,
+			check_email as checkEmail,
+			academy_title as academyTitle,
+            academy_start as academyStart,
+            academy_end as academyEnd,
+            academy_place as academyPlace,
+            academy_teacher as academyTeacher,
+            academy_category as academyCategory
+		from payment join academy using(academy_no) where member_no=#{memberNo} and payment_select = 2  and academy_end >= to_char(sysdate, ('yyyy-mm-dd')) order by payment_date desc
+	</select>
+	<select id="selecAcademtPaymentListLast" parameterType="_int" resultType="acp">
+	<![CDATA[
+		select 
+			payment_no as paymentNo,
+			payment_select as paymenySelect,
+			academy_no as academyNo,
+			exhibition_no as exhibitionNo,
+			payment_price as paymentPrice,
+			payment_date as paymentDate,
+			payment_cancel as paymentCancel,
+			payment_quantity as paymentQuantity,
+			book_date as bookDate,
+			member_no as memberNo,
+			check_email as checkEmail,
+			academy_title as academyTitle,
+            academy_start as academyStart,
+            academy_end as academyEnd,
+            academy_place as academyPlace,
+            academy_teacher as academyTeacher,
+            academy_category as academyCategory
+		from payment join academy using(academy_no) where member_no=#{memberNo} and payment_select = 2  and academy_end < to_char(sysdate, ('yyyy-mm-dd')) order by payment_date desc
+	]]>	
+	</select>
+	<update id="deleteAcPayment" parameterType="_int">
+		update payment set payment_cancel = 1 where payment_no = #{paymentNo}
+	</update>
+	<select id="studentList" parameterType="_int" resultType="sl">
+		select 
+   			 rownum as count,
+    		 member_name as memberName,
+   			 member_email as memberEmail,
+   			 payment_cancel as paymentCancel
+		from payment join member using(member_no) where academy_no =#{academyNo}
+	</select>
+	<update id="deleteAcademy" parameterType="_int">
+		update academy set academy_cancel = 1 where academy_no = #{academyNo}
+	</update>
+	<select id="countCancelQuan" parameterType="_int" resultType="_int">
+		select count(*) from payment where academy_no= #{academyNo} and payment_cancel = 0
+	</select>
+	<update id="updateAcademyStatus" parameterType="_int">
+		update payment set payment_cancel = 2 where academy_no = #{academyNo} and payment_cancel = 0 and book_date >= to_char(sysdate, ('yyyy-mm-dd'))
+	</update>
+	<update id="revivalAcademy" parameterType="_int">
+		update academy set academy_cancel = 0 where academy_no = #{academyNo}
+	</update>
+	<select id="refundStudentView" parameterType="_int" resultType="exbrf">
+		select 
+			payment_no as paymentNo,
+            member_name as memberName,
+            member_email as memberEmail
+		from payment join member using(member_no) where payment_cancel= 2 and payment_select = 2  and academy_no =#{academyNo}
+	</select>
+	<select id="teacherCheck" parameterType="string" resultType="m">
+		select * from member where member_name = #{academyTeacher} and member_level = 2 
+	</select>
+	<select id="teacherAcademyList" parameterType="string" resultType="ac">
+		  		select 
+		  			nn.academy_no as academyNo,
+		  			nn.academy_title as academyTitle,
+		  			nn.academy_start as academyStart,
+		  			nn.academy_end as academyEnd,
+		  			nn.academy_photo as academyPhoto,
+		  			nn.academy_teacher as academyTeacher,
+		  			nn.academy_place as academyPlace,
+		  			nn.academy_price as academyPrice,
+		  			nn.academy_detail as academyDetail,
+		  			nn.academy_category as academyCategory,
+		  			nn.academy_cancel as academyCancel
+		  		from (select rownum as rnum,n.* from(select * from  academy where academy_teacher =#{academyTeacher} order by academy_no desc)n)nn
+	</select>
+</mapper>

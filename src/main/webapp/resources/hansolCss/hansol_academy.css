@@ -1,0 +1,213 @@
+      .mainmenu{ 
+        margin: 0 auto;
+        overflow: hidden;
+        margin-top:50px;
+        padding-left: 0;
+    }
+ 	.academy{
+	 	float: left;
+	    width: 500px;
+	    height: 270px;
+	    border: 1px solid #eee;
+	    overflow: hidden;
+	    box-sizing: border-box;
+	    border-radius: 5px;
+        margin-top: 10px;
+        margin-left: 50px;
+	    margin-right: 20px;
+	    margin-bottom: 100px;
+        transition: transform .35s;
+        
+ 	}
+ 	
+ 	.academy>.academyImg:hover{
+ 	 cursor: pointer;
+     transform: translate3d(0,-5px,0);
+  		box-shadow :2px 2px 5px rgb(0 0 0 / 15%);;
+ 	
+ 	}
+ 	.academyImg{
+ 		height: 250px;
+        width: 210px;
+    	overflow: hidden;
+		position: relative;
+		margin-top: 10px;
+		padding-left: 5px
+		
+ 	}
+ 	.academy img{
+     height: 100%;
+     width:100%;
+	
+ 	}
+	 .info{
+		width: 250px;
+		position: relative;
+		float: right;
+		top: -230px;
+		left: -20px;
+	 }
+	 .info>p:first-child{
+		font-size: 17px;
+		font-weight : 800;
+		margin-bottom: 53px; 
+		display: block;
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
+	 }
+	 .infoButton{
+	 	text-align: center;
+	 }
+	
+	 .btn{
+	 	margin-right: 10px;
+	 	font-size: 12px;
+	 }
+	 .info p {
+		 font-size: 12px;
+	 }
+	 .info>button:first-child{
+		margin-left: 20px;
+		margin-top: 0px;
+	 }
+	 .moreBtn{
+	background-color: #064663;
+	color: #ffffff;
+	width : 200px;
+	height : 50px;
+	margin-bottom : 10px;
+	margin-left: 40%;
+}
+	 .searchMore{
+	background-color: #064663;
+	color: #ffffff;
+	width : 200px;
+	height : 50px;
+	margin-bottom : 10px;
+	margin-left: 40%;
+}
+*.moreBtn:hover{
+	background-color: #e79b36;
+	color: #064663;
+	font-weight: 800;
+	
+}
+.searchMore:hover{
+	background-color: #e79b36;
+	color: #064663;
+	font-weight: 800;
+	
+}
+.category{
+	padding-top: 100px;
+}
+.category ul{
+	width: 100%;
+    display: flex;
+    justify-content: space-evenly;
+    text-align: center;
+}
+.category ul li{
+    float: left;
+}
+.category>ul>li>a>img{
+	border-radius: 50px;
+	width:100px;
+}
+.category a{
+	border: 2px solid #eee;
+    padding: 10px 30px;
+    border-radius: 50px;
+    transition: 0.5s;
+    cursor: pointer;
+}
+.category a:hover{
+	text-decoration: none;
+}
+.on a{
+	border: 2px solid #064663;
+    color: #000000;
+}
+.search{
+    clear: both;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 50px 0 0 0;
+}
+.search_bar{
+    display: flex;
+    align-items: center;
+    border-bottom:2px solid #064663;
+    transition: 0.5s;
+    padding: 5px;
+    width: 350px;
+}
+.search_bar input{
+    outline: none;
+    border: none;
+    width: 450px;
+}
+.search_bar img{
+    width: 30px;
+}
+.search_btn{
+	outline:none;
+	border:none;
+	background:none;
+	cursor: pointer;
+}
+.buttonArea{
+	width: 1200px;
+    margin: 0 auto;
+    margin-top: 30px;
+    text-align: center;
+    height: 70px;
+}
+
+.nonebox{
+	width: 100%;
+    margin: 0 auto;
+    display: block;
+    text-align: center;
+}
+.nonebox h3{
+	font-size:28px;
+}
+.nonebox img{
+	width: 600px;
+}
+#gnb{
+	list-style: none;
+	padding: 0;
+}
+.nonebox{
+	width: 100%;
+    margin: 0 auto;
+    display: block;
+    text-align: center;
+}
+.nonebox h3{
+	font-size:28px;
+}
+.nonebox img{
+	width: 600px;
+}	
+.modal-body table tr th{
+	text-align: center;
+	background-color: #064663 ;
+	color: #ffffff;
+}
+.modal-body table tr td{
+	text-align: center;
+}
+.modal-body{
+	text-align: center;
+}
+.info>p{
+	margin-bottom: 9px;
+}
+.studentView{
+	margin-left: 35px;
+}

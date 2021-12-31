@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="resume">
+	<insert id="insertResume" parameterType="r">
+		insert 
+			into resume 
+			values(resume_seq.nextval,#{requritNo},#{resumeGender},
+			#{resumePhone},#{resumeDetail},#{memberNo},0)
+	</insert>
+	<insert id="insertResumeTbl" parameterType="rt">
+		insert 
+			into resume_tbl
+			values(resume_tbl_seq.nextval,#{resumeNo},#{filepath},#{filename})
+	</insert>
+	<select id="selectResumeNo" resultType="_int">
+		select max(resume_no) from resume
+	</select>
+	<select id="selectResumeList" parameterType="_int" resultType="r">
+	select a.resume_no as resumeNo,
+       a.requrit_no as requritNo,
+       a.resume_gender as resumeGender,
+       a.resume_detail as resumeDetail,
+       a.member_no as memberNo,
+       a.resume_phone as resumePhone,
+       a.resume_cancel as resumeCancel,
+       b.member_name as memberName
+      from resume a join member b on a.member_no = b.member_no where requrit_no =#{requritNo}
+	</select>
+	<select id="selectOneResume" parameterType="_int" resultType="r">
+	select a.resume_no as resumeNo,
+       	a.requrit_no as requritNo,
+       	a.resume_gender as resumeGender,
+       	a.resume_detail as resumeDetail,
+       	a.resume_phone as resumePhone,
+       	a.member_no as memberNo,
+       	a.resume_cancel as resumeCancel,
+       	b.member_name as memberName
+	from resume a 
+	join member b on a.member_no = b.member_no where resume_no = #{resumeNo}
+	</select>
+	<select id="selectFileList" parameterType="_int" resultType="rt">
+		select 
+			file_no as fileNo,
+			resume_no as resumeNo,
+			filepath as filepath,
+			filename as filename
+		from resume_tbl where resume_no=#{resumeNo}
+	</select>
+	<select id="selectOneFile" parameterType="_int" resultType="rt">
+		select 
+			file_no as fileNo,
+			resume_no as resumeNo,
+			filepath as filepath,
+			filename as filename
+		from resume_tbl where file_no=#{fileNo}
+	</select>
+	<update id="updateMemberLevel" parameterType="_int">
+		update member set member_level = 2 where member_no = #{memberNo}
+	</update>
+	<update id="deleteRequrit" parameterType="_int">
+		update teacher_requrit set requrit_cancel = 1 where requrit_no = #{requritNo}
+	</update>
+	<select id="selectMyResumeList" parameterType="_int" resultType="r">
+	select a.resume_no as resumeNo,
+       a.requrit_no as requritNo,
+       a.resume_gender as resumeGender,
+       a.resume_detail as resumeDetail,
+       a.member_no as memberNo,
+       a.resume_phone as resumePhone,
+       a.resume_cancel as resumeCancel,
+       b.requrit_title as requritTitle
+from resume a join teacher_requrit b on a.requrit_no = b.requrit_no 
+where a.member_no = #{memberNo} order by 1 desc
+	</select>
+	<update id="deleteResume" parameterType="_int">
+		update resume set resume_cancel = 1 where requrit_no = #{requritNo}
+	</update>
+	<select id="deleteResumeCount" parameterType="_int" resultType="_int">
+		select count(*) from resume where requrit_no = #{requritNo}
+	</select>
+</mapper>

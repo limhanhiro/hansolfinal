@@ -1,0 +1,42 @@
+body{
+	margin:0;
+}
+.container-right{
+	height:650px;
+}
+.date-form{
+	display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+.main-title{
+	border-bottom : 1px solid #d6d6d6;
+}
+.main-title>h1{
+	font-weight : 900;
+}
+.readingList-form{
+	margin-top: 20px;
+	display: flex;
+	justify-content: center;
+}
+.single-title{
+	padding-left : 40px;
+}
+.single-title span{
+	padding-top : 8px;
+	border-top : 5px solid #064663;
+}
+.single-title>ul{
+	color:#555;
+	list-style-type: none;
+	padding : 0;
+}
+.single-title>ul>li{
+	margin : 2px 2px;
+}
+.today{
+	display: flex;
+    align-items: flex-end;
+    margin-top: 10px;
+}

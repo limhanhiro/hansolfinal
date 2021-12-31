@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="requrit">
+	<insert id="requritInsert" parameterType="rq">
+		insert 
+			into teacher_requrit
+			values(teacher_requrit_seq.nextval,#{requritTitle},#{requritStart},
+			#{requritEnd},#{requritCareer},#{requritGender},#{requritField},#{requritDetail},
+			#{employeeType},0)
+	</insert>
+	<select id="selectRequritList" parameterType="pa" resultType="rq">
+		select nn.requrit_no as requritNO, 
+			nn.requrit_title as requritTitle,
+			nn.requrit_start as requritStart,
+			nn.requrit_end as requritEnd,
+			nn.requrit_career as requritCareer,
+			nn.requrit_gender as requritGender,
+			nn.requrit_field as requritField,
+			nn.requrit_detail as requritDetail,
+			nn.employee_type as employeeType,
+			nn.requrit_cancel as requritCancel
+			 from (select rownum as rnum, n.* from 
+			( select * from teacher_requrit where requrit_cancel = 0 order by requrit_no desc)n)nn where rnum BETWEEN #{start} and #{end}
+	</select>
+	<select id="selectRequritListDelete" parameterType="pa" resultType="rq">
+		select nn.requrit_no as requritNO, 
+			nn.requrit_title as requritTitle,
+			nn.requrit_start as requritStart,
+			nn.requrit_end as requritEnd,
+			nn.requrit_career as requritCareer,
+			nn.requrit_gender as requritGender,
+			nn.requrit_field as requritField,
+			nn.requrit_detail as requritDetail,
+			nn.employee_type as employeeType,
+			nn.requrit_cancel as requritCancel
+			 from (select rownum as rnum, n.* from 
+			( select * from teacher_requrit where requrit_cancel = 1 order by requrit_no desc)n)nn where rnum BETWEEN #{start} and #{end}
+	</select>
+	<select id="selectTotalCount" resultType="_int">
+  		select count(*) from teacher_requrit where requrit_cancel =0
+  	</select>
+  	<select id="selectTotalCountDelete" resultType="_int">
+  		select count(*) from teacher_requrit where requrit_cancel =1
+  	</select>
+  	<select id="selectOneRequrit" parameterType="_int" resultType="rq">
+  		select 
+  			requrit_no as requritNO, 
+			requrit_title as requritTitle,
+			requrit_start as requritStart,
+			requrit_end as requritEnd,
+			requrit_career as requritCareer,
+			requrit_gender as requritGender,
+			requrit_field as requritField,
+			requrit_detail as requritDetail,
+			employee_type as employeeType,
+			requrit_cancel as requritCancel 
+			from teacher_requrit where requrit_no=#{requritNo}
+   	</select>
+   	<update id="deleteRequrit2" parameterType="_int">
+		update teacher_requrit set requrit_cancel = 1 where requrit_no = #{requritNo}
+	</update>
+	<update id="updateRequrit" parameterType="rq">
+		update teacher_requrit set requrit_title = #{requritTitle},requrit_start = #{requritStart},requrit_end = #{requritEnd},requrit_career = #{requritCareer}
+		,requrit_gender = #{requritGender}, requrit_field = #{requritField}, requrit_detail = #{requritDetail}, employee_type = #{employeeType}
+		where requrit_no = #{requritNo}
+	</update>
+		<update id="revivalRequrit" parameterType="_int">
+		update teacher_requrit set requrit_cancel = 0 where requrit_no = #{requritNo}
+	</update>
+</mapper>

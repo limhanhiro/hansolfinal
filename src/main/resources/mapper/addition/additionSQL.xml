@@ -1,0 +1,319 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="addition">
+
+	<!--글리스트조회-->
+	<select id="noticeList" parameterType="map" resultType="board">
+		select
+			rnum as bnum,
+			board_no as boardNo,
+			board_title as boardTitle,
+			board_writer as boardWriter,
+			readcount as readCount,
+			reg_date as regDate,
+			cnt as commentCount,
+			boardlevel as boardLevel,
+			boardfix as boardFix,
+			filepath as filepath,
+			startdate as startDate,
+			enddate as endDate
+		from
+		(select rownum as rnum,n.* from
+		(select board_no,board_title,board_writer,readcount,reg_date,nvl(count, 0) as cnt,boardlevel,boardfix,filepath,startdate,enddate
+		from(select*from board where boardtype=#{boardType}) 
+		left join (select board_no,count(*) as count from (select board_no,board_ref,bc_del from board join comment1 on (board_no=board_ref) where bc_del=0) group by board_no) 
+		using (board_no) order by board_no desc)n) where rnum between #{start} and #{end}
+	</select>
+	
+	<!--글수정-->
+	<update id="boardUpdate" parameterType="map">
+		 update board set board_title=#{boardTitle},board_content=#{boardContent},filename=#{filename},filepath=#{filepath}
+		 <choose>
+			<when test="keyword.equals('fix')">
+			,boardfix=#{boardFix} where board_no=#{boardNo}
+			</when>
+			<when test="keyword.equals('secret')">
+			,boardlevel=#{boardLevel} where board_no=#{boardNo}
+			</when>
+			<otherwise>
+			where board_no=#{boardNo}
+			</otherwise>
+		</choose>
+	</update>
+	
+	<!--전체글 갯수-->
+	<select id="totalCount" parameterType="map" resultType="_int">
+		select count(*) from board where boardtype=#{boardType}
+	</select>
+	
+	<!--글쓰기-->
+	<insert id="insertBoard" parameterType="board">
+		insert into board values (board_seq.nextval,#{boardWriter},#{boardTitle},#{boardContent},default,to_char(sysdate,'yyyy-mm-dd'),#{boardType},#{boardLevel},#{boardFix},#{filename},#{filepath},#{startDate},#{endDate})
+		<selectKey  resultType="_int" order="AFTER" keyProperty="boardNo">
+			select max(board_no) from board
+		</selectKey>
+	</insert>
+	
+	<!--최신 글번호-->
+	<select id="getBoardNo" resultType="_int">
+		select max(board_no) from board
+	</select>
+	
+	<!--글보기-->
+	<select id="selectOneBoard" parameterType="_int" resultType="board">
+		 select
+		boardfix as boardFix,
+        filename as filename,
+        filepath as filepath,
+        board_no as boardNo,
+        board_title as boardTitle,
+        board_content as boardContent,
+        board_writer as boardWriter,
+        readcount as readCount,
+        reg_date as regDate,
+        cnt as commentCount,
+        boardLevel as boardLevel,
+        startdate as startDate,
+        enddate as endDate
+        from(
+        (select filename,filepath,board_no,board_title,board_content,board_writer,readcount,reg_date,nvl(count,0) as cnt,boardLevel,startdate,enddate,boardfix
+		from (select *from board where board_no =#{boardNo})
+		left join (select board_ref,count(*) as count from comment1 where bc_del=0 group by board_ref)
+		on (board_no=board_ref)))
+	</select>
+	
+	<!--글삭제-->
+	<delete id="boardDelete" parameterType="_int">
+		delete from board where board_no=#{boardNo}
+	</delete>
+	
+	<!--조회수 올리기-->
+	<update id="updateReadCount" parameterType="_int">
+		update board set readcount=readcount+1 where board_no=#{boardNo}
+	</update>
+	
+	<!--댓글리스트 조회-->
+	<select id="selectCommentList" parameterType="_int" resultType="kr.or.addition.model.vo.BoardComment">
+		select	
+			bc_no as bcNo,
+			bc_level as bcLevel,
+			bc_writer as bcWriter,
+			bc_content as bcContent,
+			reg_date as regDate,
+			board_ref as boardRef,
+			bc_ref as bcRef,
+			bcid_ref as bcidRef,
+			bc_del as bcDel
+		from comment1 where board_ref = #{boardNo} order by bc_no
+	</select>
+	
+	<!--댓글등록-->
+	<insert id="insertComment" parameterType="kr.or.addition.model.vo.BoardComment" >
+		insert into comment1 values (comment1_seq.nextval,#{bcLevel},#{bcWriter},#{bcContent},to_char(sysdate,'yyyy-mm-dd hh24:mi:ss'),#{boardRef},#{bcRef,jdbcType=INTEGER},#{bcidRef},0)
+	</insert>
+	
+	<!--댓글삭제  -->
+	<delete id="deleteComment" parameterType="_int">
+		delete from comment1 where bc_no=#{bcNo}
+	</delete>
+	
+	<!--댓글수정-->
+	<update id="updateComment" parameterType="map">
+		update comment1 set bc_content=#{bcContent}
+		<if test="del eq 1">
+			,bc_del=1
+		</if>
+		 where bc_no=#{bcNo}
+	</update>
+	
+	<!--새글수조회-->
+	<select id="selectNewCount" parameterType="_int" resultType="_int">
+		select count(*) from(select *from (select*from board where boardtype=#{boardType}) where reg_date =(select to_char(sysdate,'yyyy-mm-dd') as 오늘날짜 from dual))
+	</select>
+	
+	<!--댓글수 조회-->
+	<select id="selectCommentCount" resultType="_int">
+		select board_no,count(*) from (select board_no,board_ref,bc_del from board join comment1 on (board_no=board_ref)  where bc_del=0) group by board_no
+	</select>
+	
+	<!--키워드 검색-->
+	<select id="searchKeyword" parameterType="map" resultType="board">
+	select
+			rnum as bnum,
+			board_no as boardNo,
+			board_title as boardTitle,
+			board_writer as boardWriter,
+			readcount as readCount,
+			reg_date as regDate,
+			cnt as commentCount,
+			boardlevel as boardLevel
+	from
+	(select rownum as rnum,n.* from
+	(select board_no,board_title,board_content,boardtype,board_writer,readcount,reg_date,nvl(count, 0) as cnt,boardlevel
+	from(select*from board where boardtype=#{boardType}) 
+	left join (select board_no,count(*) as count from (select board_no,board_ref from board join comment1 on (board_no=board_ref)) group by board_no) 
+	using (board_no) order by board_no desc)n
+	where boardtype=#{boardType} and 
+		<choose>
+			<when test="type.equals('tac')">
+			(board_title like '%'||#{keyword}||'%' or board_content like '%'||#{keyword}||'%')) where rnum between #{start} and #{end}
+			</when>
+			<when test="type.equals('writer')">
+			(board_writer like #{keyword})) where rnum between #{start} and #{end}
+			</when>
+		</choose>
+	</select>
+	
+	<!--키워드 검색글 갯수-->
+	<select id="totalKCount" parameterType="map" resultType="_int">
+		select count(*) 
+		from(select *from board where boardtype=#{boardType} and 
+		<choose>
+			<when test="type.equals('tac')">
+			(board_title like '%'||#{keyword}||'%' or board_content like '%'||#{keyword}||'%'))
+			</when>
+			<when test="type.equals('writer')">
+			(board_writer like #{keyword})) 
+			</when>
+		</choose>
+	</select>
+	
+	<!--이전글/다음글-->
+	<select id="selectNextBoard" parameterType="_int" resultType="kr.or.addition.model.vo.BoardNext">
+	select
+	rnum,
+	board_no as boardNo,
+	board_title as boardTitle,
+	next as nextNo,
+	prev as prevNo,
+	next_title as nextTitle,
+	prev_title as prevTitle
+	from 
+	(select rnum,board_no,board_title,lead(board_no,1,0) over(order by rnum desc) next,lag(board_no,1,0) over(order by rnum desc) prev,
+	lead(board_title,1,'다음글이 없습니다.') over(order by rnum desc) next_title,lag(board_title,1,'이전글이 없습니다.') over(order by rnum desc) prev_title
+	from
+	(select rownum as rnum,n.* from
+	(select board_no,board_title,board_content,boardtype,board_writer,readcount,reg_date,nvl(count, 0) as cnt
+	from(select*from board where boardtype=#{boardType} and (boardlevel=1 or boardlevel=0)) 
+	left join (select board_no,count(*) as count from (select board_no,board_ref from board join comment1 on (board_no=board_ref)) group by board_no) 
+	using (board_no) order by board_no desc)n
+	where boardtype=#{boardType}) order by rnum ) where board_no=#{boardNo}
+	</select>
+	
+	<!--고정글갯수-->
+	<select id="fixCount" parameterType="_int" resultType="_int">
+	select count(*) from board where boardtype=1 and boardfix=1
+	</select>
+	<!--고정글목록-->
+	<select id="selectFixlist" resultType="board">
+	select
+			board_no as boardNo,
+			board_title as boardTitle,
+			board_writer as boardWriter,
+			readcount as readCount,
+			reg_date as regDate,
+			boardlevel as boardLevel,
+			boardfix as boardFix
+	from board where boardtype=1 and boardfix=1 order by board_no desc
+	</select>
+	<!--글규제-->
+	<update id="regulationBoard" parameterType="_int">
+	 update board set boardLevel=2 where board_no=#{boardNo}
+	</update>
+	
+	<!--글규제해제-->
+	<update id="removeRegulationBoard" parameterType="_int">
+	 update board set boardLevel=0 where board_no=#{boardNo}
+	</update>
+	
+	<!--좋아요-->
+	<insert id="boardLike" parameterType="map">
+		<if test="checkNum == 0">
+		insert into likenum values(#{memberId},#{boardNo},1,0)
+		</if>
+		<if test="checkNum == 1">
+		insert into likenum values(#{memberId},#{boardNo},0,1)
+		</if>
+	</insert>
+	
+	<!--좋아요 취소-->
+	<delete id="boardDislike" parameterType="map">
+		delete from likenum where board_ref=#{boardNo} and member_id=#{memberId}
+	</delete>
+	
+	<!--좋아요 수 들고오기-->
+	<select id="selectLikeSum" parameterType="_int" resultType="kr.or.addition.model.vo.LikeNo">
+	select
+	board_ref as boardRef,
+	likesum as likeSum,
+	dislikesum as dislikeSum
+	from (SELECT board_ref , sum(like_num) as likesum , sum(dislike_num)  as dislikesum
+	FROM likenum GROUP BY board_ref) where board_ref=#{boardNo}
+	</select>
+	
+	<select id="selectLikeChk" parameterType="map" resultType="kr.or.addition.model.vo.LikeNo">
+	select
+	member_id as memberId,
+	board_ref as boardRef,
+	like_num as likeSum,
+	dislike_num as dislikeSum
+	from likenum where board_ref=#{boardNo} and member_id=#{memberId}
+	</select>
+	
+	<!--내가 쓴 글 조회-->
+	<select id="myList" parameterType="map" resultType="board">
+	select
+	boardlevel as boardLevel,
+	rnum as bnum,
+	board_no as boardNo,
+	board_title as boardTitle,
+	board_writer as boardWriter,
+	readcount as readCount,
+	reg_date as regDate,
+	cnt as commentCount
+	from(
+	select rownum as rnum,n.* from
+	(select board_no,board_title,board_writer,readcount,reg_date,nvl(count, 0) as cnt,boardlevel
+	from(select*from board where boardtype=#{boardType} and board_writer =#{memberId}) 
+	left join (select board_no,count(*) as count from (select board_no,board_ref from board join comment1 on (board_no=board_ref)) group by board_no) 
+	using (board_no) order by board_no desc)n)
+	</select>
+	
+	<!--내가 쓴 댓글 조회-->
+	<select id="myCommentList" parameterType="string" resultType="kr.or.addition.model.vo.BoardComment">
+	select 
+	bc_no as bcNo,
+	bc_ref as bcRef,
+	bc_writer as bcWriter,
+	bc_content as bcContent,
+	board_ref as boardRef,
+	board_title as boardTitle,
+	boardtype as boardType,
+	comment1.reg_date as regDate,
+	bc_del as bcDel
+	from comment1 
+	join board on (board_no=board_ref)
+	where bc_writer=#{memberId} and bc_del=0 order by comment1.reg_date desc
+	</select>
+	
+	<!--해당댓글 대댓글 조회-->
+	<select id="chkReComment" parameterType="_int" resultType="kr.or.addition.model.vo.BoardComment">
+	select
+	bc_writer as bcWriter
+	from comment1 where bc_ref=#{bcNo}
+	</select>
+	
+	<!--삭제 댓글조회-->
+	<select id="chkDelComment" parameterType="_int" resultType="kr.or.addition.model.vo.BoardComment">
+	select
+	bc_del as bcDel
+	from comment1 where bc_no=#{bcRef}
+	</select>
+	
+	<!--이벤트글갯수-->
+	<select id="totalEventCount" parameterType="_int" resultType="_int">
+	select count(*) from board where boardtype=5
+	</select>
+	
+	
+</mapper>

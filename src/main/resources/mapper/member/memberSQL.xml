@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="member">
+ 	<select id="selectOneMember" parameterType="m" resultType="m">
+ 		select 
+			MEMBER_NO as memberNo,
+			MEMBER_ID as memberId,
+			MEMBER_EMAIL as memberEmail,
+			MEMBER_PASSWORD as memberPassword,
+			MEMBER_NAME as memberName,
+			MEMBER_PHONE as memberPhone,
+			MEMBER_BIRTHDAY as memberBirthday,
+			MEMBER_GENDER as memberGender,
+			POSTCODE as postcode,
+			ADDRESS_ROAD as addressRoad,
+			ADDRESS_DETAIL as addressDetail,
+			MEMBER_LEVEL as memberLevel
+ 		from member where member_id=#{memberId} and member_password=#{memberPassword}
+ 	</select>
+ 	<insert id="insertMember" parameterType="m">
+ 		insert into member values
+ 			(member_seq.nextval,
+ 			#{memberId},
+ 			#{memberEmail},
+ 			#{memberPassword},
+ 			#{memberName},
+ 			#{memberPhone},
+ 			#{memberBirthday},
+ 			#{memberGender},
+ 			#{postcode},
+ 			#{addressRoad},
+ 			#{addressDetail},
+ 			1,
+ 			#{memberReceiveEmail},
+ 			#{memberReceiveSms},
+ 			1,
+ 			to_char(sysdate,'yyyy-mm-dd'),null)
+ 	</insert>
+ 	<select id="selectOneId" parameterType="string" resultType="m">
+ 		select 
+ 			member_id as memberId
+ 		from member where member_id=#{memberId}
+ 	</select>
+ 	 	<select id="selectOneEmail" parameterType="string" resultType="m">
+ 		select 
+ 			member_email as memberEmail
+ 		from member where member_Email=#{memberEmail}
+ 	</select>
+ 	 	<select id="selectOnePw" parameterType="string" resultType="m">
+ 		select 
+ 			member_password as memberPassword
+ 		from member where member_password=#{memberPassword}
+ 	</select>
+ 	<update id="updateMember" parameterType="m">
+ 		update member set 	
+ 			MEMBER_EMAIL = #{memberEmail},	
+ 			POSTCODE = #{postcode},
+			ADDRESS_ROAD = #{addressRoad},
+			ADDRESS_DETAIL = #{addressDetail} 
+		where member_id=#{memberId}
+ 	</update>
+ 	 	<update id="updateMemberLevel" parameterType="m">
+ 		update member set 	
+			MEMBER_LEVEL = #{memberLevel}
+		where member_no=#{memberNo}
+ 	</update>
+ 	<select id="selectEmail" parameterType="string" resultType="string">
+		select
+			member_email as memberEmail
+		from member
+		where member_id = #{memberId}	
+	</select>
+	 	<update id="searchidpw" parameterType="m">
+ 		update member set 		
+ 			MEMBER_PASSWORD = #{memberPassword}
+		where member_id=#{memberId}
+ 		</update>
+	<select id="searchId" parameterType="m" resultType="m">
+		select
+			member_id as memberId	
+		from member
+		where member_email = #{memberEmail}	
+	</select>
+	<select id="searchMember" parameterType="map" resultType="m">
+ 		select 
+ 			MEMBER_NO as memberNo,
+			MEMBER_ID as memberId,
+			MEMBER_EMAIL as memberEmail,
+			MEMBER_PASSWORD as memberPassword,
+			MEMBER_NAME as memberName,
+			MEMBER_PHONE as memberPhone,
+			MEMBER_BIRTHDAY as memberBirthday,
+			enroll_date as enrollDate,
+			MEMBER_LEVEL as memberLevel
+		from
+ 		(select rownum as rnum, m.* from 
+		( select * from 
+		member where 
+		(member_id like '%'||#{search}||'%' or member_email like '%'||#{search}||'%' or member_name like '%'||#{search}||'%' or member_id like '%'||#{search}||'%')
+		<if test="memberLevel != null">
+		and member_level in
+		<foreach collection="memberLevel" item="level" open="(" close=")" separator=",">
+		#{level}
+		</foreach>
+		</if>
+		
+		 order by member_no )m)mn where rnum BETWEEN #{start} and #{end}
+ 	</select>
+ 	 <select id="selectAllMember" parameterType="map" resultType="m">
+ 		select 
+ 			mn.MEMBER_NO as memberNo,
+			mn.MEMBER_ID as memberId,
+			mn.MEMBER_EMAIL as memberEmail,
+			mn.MEMBER_PASSWORD as memberPassword,
+			mn.MEMBER_NAME as memberName,
+			mn.MEMBER_PHONE as memberPhone,
+			mn.MEMBER_BIRTHDAY as memberBirthday,
+			mn.enroll_date as enrollDate,
+			mn.MEMBER_LEVEL as memberLevel
+ 		from
+ 		(select rownum as rnum, m.* from 
+		( select * from member order by member_no )m)mn where rnum BETWEEN #{start} and #{end}
+ 	</select>
+ 		<!--전체멤버 수-->
+	<select id="selectTotalCount" resultType="_int">
+		select count(*) from member
+	</select>
+	
+	<select id="searchTotalCount" resultType="_int">
+		select count(*) from member  where 
+		(member_id like '%'||#{search}||'%' or member_email like '%'||#{search}||'%' or member_name like '%'||#{search}||'%' or member_id like '%'||#{search}||'%')
+		<if test="memberLevel != null">
+		and member_level in
+			<foreach collection="memberLevel" item="level" open="(" close=")" separator=",">
+			#{level}
+			</foreach>
+		</if>
+	</select>
+	<select id="selectDeleteMember" parameterType="_int" resultType="md">
+		select '1' as selectNo,reserv_no as reserveNo,show_name as reserveTitle,show_date as reserveDate 
+		from show_reserv
+		join show using(show_no)
+		where member_id=(select member_id from member where member_no=#{memberNo}) and show_date > to_char(sysdate,'yyyy-mm-dd')
+		union
+		select '2',rental_no,space_name,rental_date 
+		from rental 
+		join space using (space_no)
+		where member_id=(select member_id from member where member_no=#{memberNo}) and used_board = 0
+		union
+		select '3', reading_no,'열람',reading_day from reading where reading_id=(select member_id from member where member_no=#{memberNo}) and  reading_day > to_char(sysdate,'yyyy-mm-dd')
+		union
+		select '4',payment_no, academy_title,academy_start||'~'||academy_end 
+		from payment 
+		join academy using (academy_no)
+		where payment_select=2 and member_no=#{memberNo} and  book_date > to_char(sysdate,'yyyy-mm-dd')
+		union
+		select '5', payment_no,exhibition_title,book_date
+		from payment
+		join exhibition using (exhibition_no)
+		where payment_select=1 and member_no=#{memberNo} and  book_date > to_char(sysdate,'yyyy-mm-dd')
+ 	</select>
+	<delete id="deleteMember" parameterType="m">
+		delete from member where member_no=#{memberNo}
+	</delete>
+		<update id="updatePassword" parameterType="m">
+ 		update member set 		
+ 			MEMBER_PASSWORD = #{memberPassword}
+		where member_id=#{memberId}
+ 		</update>
+ 		<select id="selectMemberEmail" parameterType="_int" resultType="string">
+		select
+			member_email as memberEmail
+		from member
+		where member_no = #{memberNo}	
+	</select>
+</mapper>

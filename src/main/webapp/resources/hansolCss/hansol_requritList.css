@@ -1,0 +1,52 @@
+#firstTr th{
+	text-align: center;
+	background-color: #064663 ;
+	color: #ffffff;
+	height: 50px;
+	line-height: 50px;
+	font-size: 15px;
+}
+
+table tr td{
+	text-align: center;
+}
+table tr td>a{
+	text-decoration: none;
+	color: black;
+}
+table tr td>a:hover{
+	text-decoration: none;
+	color: black;
+}
+#pageNavi{
+	text-align: center;
+}
+#pageNumAct a{
+    background-color: #064663;
+    border-color: #064663;
+    color: white;
+    border: none;
+}
+#pageNum a{
+    color: black;
+    border: none;
+}
+#firstTr>th:nth-child(1){
+	width: 100px;
+}
+#firstTr>th:nth-child(3){
+	width: 130px;
+}
+#firstTr>th:nth-child(4){
+	width: 200px;
+}
+#secTr td{
+	border-top: 1px solid #064663;
+	height: 30px;
+	line-height: 30px;
+}
+
+#tableee{
+	margin: 0 auto;
+	width: 1050px;
+}

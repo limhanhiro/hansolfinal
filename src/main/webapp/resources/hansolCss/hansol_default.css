@@ -1,0 +1,32 @@
+.line{
+	padding-top : 5px;
+	border-top : 5px solid #064663;
+}
+.sectorLine{
+    margin-top: 5px;
+    margin-bottom: 5px;
+    border-bottom: 1px solid #064663;
+}
+.hsBtn1{
+	background-color: #064663;
+	color: #ffffff;
+}
+.hsBtn1:hover {
+	background-color: #e79b36;
+	color: #064663;
+	font-weight: 800;
+}
+.btn{
+	background-color: #064663;
+	color: #ffffff;
+	border: 0px
+	
+}
+.btn:hover {
+	background-color: #e79b36;
+	color: #064663;
+	font-weight: 800;
+}
+.form-group{
+	margin-bottom: 35px;
+}

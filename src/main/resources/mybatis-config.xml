@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd" >
+<configuration>
+	<settings>
+		<setting name="jdbcTypeForNull" value="NULL"/>
+	</settings>
+	<typeAliases>
+		<typeAlias type="show.vo.Show" alias="show"/>
+		<typeAlias type="show.vo.ShowReview" alias="sReview"/>
+		<typeAlias type="show.vo.ShowReserv" alias="sReserv"/>
+		<typeAlias type="show.vo.Seat" alias="seat"/>
+		<typeAlias type="kr.or.addition.model.vo.Board" alias="board"/>
+		<typeAlias type="kr.or.reading.model.vo.Reading" alias="reading"/>
+		<typeAlias type="kr.or.reading.model.vo.ReadingBlack" alias="black"/>
+		<typeAlias type="kr.or.space.model.vo.Space" alias="space"/>
+		<typeAlias type="kr.or.member.vo.Member" alias="m"/>
+		<typeAlias type="kr.or.member.vo.DeleteMember" alias="md"/>
+		<typeAlias type="kr.or.space.model.vo.FileVO" alias="fv"/>
+		<typeAlias type="kr.or.exhibition.vo.Exhibition" alias="exb"/>
+		<typeAlias type="kr.or.requrit.vo.Requrit" alias="rq"/>
+		<typeAlias type="kr.or.requrit.vo.RequritPagingVo" alias="pa"/>
+		<typeAlias type="kr.or.academy.vo.Academy" alias="ac"/>
+		<typeAlias type="kr.or.academy.vo.AcademyPagingVo" alias="ap"/>
+		<typeAlias type="kr.or.space.model.vo.Rental" alias="rental"/>
+		<typeAlias type="kr.or.exhibition.vo.ExhibitionPayment" alias="exbp"/>
+		<typeAlias type="kr.or.academy.vo.AcademyPayment" alias="acp"/>
+		<typeAlias type="kr.or.exhibition.vo.ExhibitionPagingVo" alias="ep"/>
+		<typeAlias type="kr.or.resume.vo.Resume" alias="r"/>
+		<typeAlias type="kr.or.resume.vo.ResumeTbl" alias="rt"/>
+		<typeAlias type="kr.or.exhibition.vo.ExhibitionReview" alias="exr"/>
+		<typeAlias type="kr.or.academy.vo.AcademyCategory" alias="acc"/>
+		<typeAlias type="kr.or.reading.model.vo.Fixtures" alias="fixtures"/>
+		<typeAlias type="kr.or.exhibition.vo.ExhibitionPaymentMypage" alias="exbpm"/>
+		<typeAlias type="kr.or.academy.vo.StudentList" alias="sl"/>
+		<typeAlias type="kr.or.exhibition.vo.ExhibitionRefund" alias="exbrf"/>
+	</typeAliases>
+</configuration>

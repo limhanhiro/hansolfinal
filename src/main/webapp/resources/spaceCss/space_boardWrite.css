@@ -1,0 +1,49 @@
+[name=ubTitle]{
+	width: 500px;
+}
+[name=ubContent]{
+	width: 100%;
+	height: 500px;
+	padding: 10px;
+}
+#content{
+	border: 1px solid black;
+}
+.btn-box{
+	text-align: center;
+	margin-top: 50px;
+}
+.tb tr th{
+	border: 1px solid black;
+}
+.tb tr td{
+	border: 1px solid black;
+}
+.btn-box button{
+	border : 1px solid #064663; 
+	width : 250px;
+	height : 50px;
+	background-color: white;
+	color: #064663 ;
+	border-radius: 10px;
+}
+.view-btn{
+	text-align: right;
+}
+.view-btn button{
+	border : 1px solid #064663; 
+	width : 59px;
+	background-color: white;
+	color: #064663 ;
+	border-radius: 10px;
+}
+.prev-btn{
+	float: left;
+}
+.prev-btn button{
+	border : 1px solid #064663; 
+	width : 100px;
+	background-color: #064663;
+	color: white ;
+	border-radius: 10px;
+}

@@ -1,0 +1,5 @@
+/additionBoard.do?boardType=1&reqPage=1 부가서비스,공지사항
+/additionBoard.do?boardType=3&reqPage=1 소통게시판
+/additionBoard.do?boardType=2&reqPage=1 문의게시판
+
+

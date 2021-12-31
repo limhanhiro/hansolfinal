@@ -1,0 +1,41 @@
+@charset "UTF-8";
+
+.showList{
+	display: flex;
+	align-content: center;
+	justify-content: flex-start;
+	border: 2px solid #195083;
+	margin-bottom: 10px;
+	padding: 5px;
+}
+.poster{
+	width: 120px;
+	height: 150px;
+}
+.showList>div{
+	margin-left: 20px;
+	width: 455px;
+}
+.showList>div:last-child{
+	display: flex;
+	align-items: flex-end;
+	justify-content: flex-end;
+}
+.listNavi{
+    display: flex;
+    margin-bottom: 30px;
+}
+.listNavi>div{
+    width: 50%;
+    border-bottom: 2px solid #195083;
+    text-align: center;
+    cursor: pointer;
+}
+.selec{
+	color: #195083;
+	font-weight: bold;
+}
+.show{
+	height: 150px;
+	overflow: auto;
+}

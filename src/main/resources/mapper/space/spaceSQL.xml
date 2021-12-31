@@ -1,0 +1,509 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="space">
+	<insert id="insertSpace" parameterType="space">
+		insert
+			into space
+			values(space_seq.nextval,#{spaceName},#{spacePurpose},#{mainFacility},#{mainProduct},#{maxPeople},#{price},'N')
+			<selectKey resultType="_int" order="AFTER" keyProperty="spaceNo">
+				select max(space_no) from space
+			</selectKey>
+	</insert>
+	<select id="selectSpaceNo" resultType="_int">
+		select
+			max(space_no)
+			from space
+	</select>
+	<insert id="insertFile" parameterType="fv">
+		insert
+			into space_file 
+			values(space_file_seq.nextval,#{spaceNo},#{filename},#{filepath},
+			<choose>
+				<when test="thumbnail == null">
+					'N'
+				</when>			
+			<otherwise>
+				'Y'
+			</otherwise>
+			</choose>
+			)
+	</insert>
+	<insert id="insertSpaceTime" parameterType="kr.or.space.model.vo.SpaceTime">
+		insert
+			into space_time
+			values(st_seq.nextval,#{spaceNo},#{startTime},#{endTime})
+	</insert>
+	<select id="selectAllSpace" resultType="space">
+		select
+			space_no as spaceNo,
+			space_name as spaceName,
+			space_purpose as spacePurpose,
+			main_facility as mainFacility,
+			main_product as mainProduct,
+			max_people as maxPeople,
+			price
+		from space
+		where del_yn like 'N' 	
+	</select>
+	<select id="selectFile" resultType="fv">
+		select
+			space_no as spaceNo,
+			filename,
+			filepath,
+			thumbnail
+		from space_file	
+		where thumbnail like 'Y'
+	</select>
+	<select id="selectOneSpace" resultType="space" parameterType="_int">
+		select
+			space_no as spaceNo,
+			space_name as spaceName,
+			space_purpose as spacePurpose,
+			main_facility as mainFacility,
+			main_product as mainProduct,
+			max_people as maxPeople,
+			price
+		from space
+		where del_yn like 'N' and space_no=#{spaceNo}
+	</select>
+	<select id="selectSpaceFile" resultType="fv" parameterType="_int">
+		select
+			space_no as spaceNo,
+			filename,
+			filepath,
+			thumbnail
+		from space_file	
+		where thumbnail like 'N' and space_no=#{spaceNo}
+	</select>
+	<select id="selectThumbnail" parameterType="_int" resultType="fv">
+		select
+			space_no as spaceNo,
+			filename,
+			filepath,
+			thumbnail
+		from space_file	
+		where thumbnail like 'Y' and space_no=#{spaceNo}	
+	</select>
+	<update id="deleteSpace" parameterType="_int">
+		update
+			space set 
+			del_yn = 'Y'
+			where space_no = #{spaceNo}
+	</update>
+	<select id="selectFileList" parameterType="_int" resultType="fv">
+		select
+			space_no as spaceNo,
+			filename,
+			filepath,
+			thumbnail
+		from space_file	
+		where space_no = #{spaceNo}
+	</select>
+	<select id="selectSpaceTime" parameterType="_int" resultType="kr.or.space.model.vo.SpaceTime">
+		select
+			st_no as stNo,
+			space_no as spaceNo,
+			start_time as startTime,
+			end_time as endTime
+		from space_time
+		where space_no = #{spaceNo}	
+	</select>
+	<select id="selectOneTime" parameterType="_int" resultType="kr.or.space.model.vo.SpaceTime">
+		select
+			st_no as stNo,
+			space_no as spaceNo,
+			start_time as startTime,
+			end_time as endTime
+		from space_time
+		where st_no = #{stNo}	
+	</select>
+	<insert id="insertRental" parameterType="rental">
+		insert
+			into rental
+			values(rental_seq.nextval,#{spaceNo},#{memberId},#{stNo},#{rentalDate},#{rentalPeople},1,0)
+	</insert>
+	<select id="selectRentalList" parameterType="string" resultType="rental">
+	<![CDATA[	
+		select 
+			r.rental_no as rentalNo,
+			r.member_id as memberId,
+			r.rental_date as rentalDate,
+			r.rental_status as rentalStatus, 
+			s.space_name as spaceName, 
+			r.used_board as usedBoard, 
+			st.end_time 
+		from rental r 
+		join space s using(space_no)  
+		join space_time st using(st_no) 
+		where rental_date < to_char(sysdate,'yyyy-mm-dd')
+        and member_id = #{memberId} 
+		and used_board = 0 
+		and rental_status =2
+		union 
+        select * from (select 
+			r.rental_no as rentalNo,
+			r.member_id as memberId,
+			r.rental_date as rentalDate,
+			r.rental_status as rentalStatus, 
+			s.space_name as spaceName, 
+			r.used_board as usedBoard, 
+			st.end_time 
+		from rental r 
+		join space s using(space_no)  
+		join space_time st using(st_no) 
+		where rental_date = to_char(sysdate,'yyyy-mm-dd')
+        and member_id = 'hy01' 
+		and used_board = 0 
+		and rental_status =2
+        )        
+		where end_time < to_char(sysdate , 'HH24:mi')
+	]]>
+	</select>
+	<select id="selectRentalNo" parameterType="_int" resultType="rental">
+		select
+			rental_no as rentalNo,
+			space_name as spaceName,
+			member_id as memberId,
+			st_no as stNo,
+			rental_date as rentalDate,
+			rental_people as rentalPeople,
+			rental_status as rentalStatus,
+			used_board as usedBoard
+		from rental
+		join space using (space_no)
+		where rental_no=#{rentalNo}
+	</select>
+	<select id="selectAllRental"  resultType="kr.or.space.model.vo.SpaceAdmin">
+		select
+			rnum,
+			rental_no as rentalNo,
+			space_name as spaceName,
+			member_id as memberId,
+			start_time as startTime,
+			end_time as endTime,
+			rental_date as rentalDate,
+			rental_people as rentalPeople,
+			filename,
+			rental_status as rentalStatus,
+			used_board as usedBoard
+		from(select rownum as rnum, r.* from(SELECT * FROM rental order by rental_no desc)r)
+		join space using(space_no) 
+		join space_file using(space_no) 
+		join space_time using(st_no) 
+		where thumbnail = 'Y' and rnum between #{start} and #{end} order by 1
+	</select>
+	<select id="selectTotalRentalCount" resultType="_int">
+		select 
+			count(*) as cnt 
+		from rental		
+	</select>
+	<update id="updateRentalStatus" parameterType="_int">
+		update
+			rental set
+			rental_status = 2
+		where rental_no = #{rentalNo}	 
+	</update>
+	<select id="selectResSpace" parameterType="_int" resultType="kr.or.space.model.vo.ResSpace">
+		 select 
+			 rental.space_no as spaceNo, 
+			 st_no as stNo,
+			 rental_date as rentalDate, 
+			 start_time as startTime, 
+			 end_time as endTime 
+		from rental 
+		join space_time using (st_no) 
+		where rental.space_no=#{spaceNo} 
+		order by start_time
+	</select>
+	<select id="selectResList" parameterType="map" resultType="kr.or.space.model.vo.ResSpace">
+		select 
+			rental.space_no as spaceNo,
+			st_no as stNo, 
+			rental_date as rentalDate, 
+			start_time as startTime, 
+			end_time as endTime 
+		from rental 
+		join space_time using (st_no) 
+		where rental.space_no=#{spaceNo} and rental_date=#{selectDate} 
+		order by start_time
+	</select>
+	<select id="selectSpaceMypage" parameterType="map" resultType="kr.or.space.model.vo.SpaceMypage">
+		select  
+			rental_no as rentalNo, 
+            sr_no as srNo,
+            sr.del_yn as delYn,
+			space_name as spaceName,  
+			start_time as startTime, 
+			end_time as endTime,
+			rental_date as rentalDate,
+			space_purpose as spacePurpose,
+			main_facility as mainFacility, 
+			main_product as mainProduct, 
+			max_people as maxPeople, 
+			price,
+			rental_people as rentalPeople,
+			rental_status as rentalStatus,
+			used_board as usedBoard 
+		from rental r 
+		join space using(space_no) 
+		join space_time using (st_no)  
+        left join space_review sr  using (rental_no)
+		<choose>
+			<when test="ub.equals('on')">
+	<![CDATA[
+		where r.member_id =#{memberId} and used_board = 0 and rental_date < sysdate	
+		]]>	
+			</when>
+			<otherwise>
+		where r.member_id =#{memberId}
+			</otherwise>
+		</choose>
+		order by rental_date desc
+	</select>
+	<select id="selectUseBoardList" parameterType="map" resultType="kr.or.space.model.vo.UseBoard">
+		 select 
+		 	*
+            from
+        (select rownum as rnum, b.* 
+		 from(SELECT 
+         ub_no as ubNo, 
+            space_name as spaceName,
+		 	use_board.member_id as memberId, 
+		 	ub_title as ubTitle, 
+		 	ub_content as ubContent, 
+		 	ub_date as ubDate, 
+		 	filename, 
+		 	filepath
+         FROM use_board 
+         join rental using(rental_no) 
+         join space using(space_no)  order by ub_no desc)b) 
+         where rnum between #{start} and #{end}
+	</select>
+	<select id="selectTotalCount" resultType="_int">
+		select 
+			count(*) as cnt 
+		from use_board
+		where del_yn = 'N'
+	</select>
+	<insert id="insertUseBoard" parameterType="kr.or.space.model.vo.UseBoard">
+		insert
+			into use_board
+			values(ub_seq.nextval,#{rentalNo},#{memberId},#{ubTitle},#{ubContent},to_char(sysdate,'yyyy-mm-dd'),#{filename},#{filepath},'N')
+	</insert>
+	<update id="updateUseBoardStatus" parameterType="_int">
+		update
+			rental set
+			used_board = 1
+		where rental_no=#{rentalNo}	
+	</update>
+	<select id="selectOneBoardView" parameterType="_int" resultType="kr.or.space.model.vo.UseBoard">
+		select 
+			ub_no as ubNo,
+			rental_no as rentalNo,
+			member_id as memberId,
+			ub_title as ubTitle,
+			ub_content as ubContent,
+			ub_date as ubDate,
+			filename,
+			filepath
+		from use_board
+		where ub_no = #{ubNo}	
+	</select>
+	<delete id="deleteUseBoard" parameterType="_int">
+		delete
+		from use_board
+		where ub_no = #{ubNo}	
+	</delete>
+	<update id="updateUseBoard" parameterType="kr.or.space.model.vo.UseBoard">
+		update
+			use_board set
+			ub_title = #{ubTitle},
+			ub_content = #{ubContent},
+			filename = #{filename},
+			filepath = #{filepath}
+		where ub_no = #{ubNo}		
+	</update>
+	<select id="selectSpaceReview" parameterType="map" resultType="kr.or.space.model.vo.SpaceReview">
+		select 
+			sr_no as srNo, 
+			srr.member_id as memberId, 
+			rental_no as rentalNo,
+			sr_content as srContent,
+			sr_date as srDate 
+		from(select rownum as rnum, sr.* 
+		from(SELECT * FROM space_review order by sr_no desc)sr)srr 
+		join rental using (rental_no) 
+		where rnum between #{start} and #{end} and del_yn='N' and space_no=#{spaceNo}
+	</select>
+	<select id="selectRentalInfo" parameterType="_int" resultType="rental">
+		select
+			rental_no as rentalNo,
+			space_no as spaceNo,
+			member_id as memberId,
+			st_no as stNo,
+			rental_date as rentalDate,
+			rental_people as rentalPeople,
+			used_board as usedBoard
+		from rental
+		where rental_no = #{rentalNo}	
+	</select>
+	<insert id="insertSpaceReview" parameterType="kr.or.space.model.vo.SpaceReview">
+		insert
+			into space_review
+			values(sr_seq.nextval,#{rentalNo},#{memberId},#{srContent},to_char(sysdate,'yyyy-mm-dd'),'N')
+	</insert>
+	<select id="selectTotalReviewCount" parameterType="_int" resultType="_int">
+		select 
+			count(*) 
+		from space_review 
+		join rental using(rental_no) 
+		where space_no = #{spaceNo} and del_yn = 'N'
+	</select>
+	<select id="selectMyReview" parameterType="_int" resultType="kr.or.space.model.vo.SpaceReview">
+		select
+			sr_no as srNo,
+			rental_no as rentalNo,
+			member_id as memberId,
+			sr_content as srContent,
+			sr_date as srDate 
+		from space_review 
+		where rental_no = #{rentalNo} and del_yn = 'N'
+	</select>
+	<select id="selectBlackId" resultType="string">
+	<![CDATA[
+		select
+			member_id as memberId 
+		from rental 
+		where used_board = 0 
+		and to_date(rental_date,'yyyy-mm-dd')+7 < sysdate
+		]]>	
+	</select>
+	<insert id="insertSpaceBlack" parameterType="string">
+		insert 
+			into reading_black 
+			values(reading_black_seq.nextval,to_char(sysdate,'yy/mm/dd hh24:mi:ss'),to_date(to_char(sysdate+8,'yymmdd'))||' 00:00:00',#{memberId},1,'N')
+	</insert>
+	<delete id="deleteRental" parameterType="string">
+	<![CDATA[
+		delete 
+			from rental 
+			where member_id = #{memberId} 
+			and rental_date >sysdate
+		]]>				
+	</delete>
+	<update id="updateReview" parameterType="kr.or.space.model.vo.SpaceReview">
+		update
+			space_review set
+			sr_content = #{srContent}
+		where rental_no = #{rentalNo}
+	</update>
+	<select id="selectBlackList" resultType="kr.or.space.model.vo.Black">
+		select
+			black_id as blackId
+		from reading_black
+		where black_ty = 1	and black_del = 'N'
+	</select>
+	<delete id="deleteReview" parameterType="_int">
+		delete 
+			from space_review 
+			where rental_no = #{rentalNo}	
+	</delete>
+	<update id="updateSpace" parameterType="space">
+		update
+			space set
+			space_name = #{spaceName},
+			space_purpose = #{spacePurpose},
+			main_facility = #{mainFacility},
+			main_product = #{mainProduct},
+			max_people = #{maxPeople},
+			price = #{price}
+		where space_no = #{spaceNo}	
+	</update>
+	<delete id="deleteSpaceFile" parameterType="fv">
+		delete
+			from space_file
+			where space_no = #{spaceNo}	
+	</delete>
+	<update id="updateSpaceTime" parameterType="kr.or.space.model.vo.SpaceTime">
+		update
+			space_time set
+			start_time = #{startTime},
+			end_time = #{endTime}
+		where st_no = #{stNo}
+	</update>
+	<select id="selectDelSpace" resultType="space">
+		select
+			space_no as spaceNo,
+			space_name as spaceName,
+			space_purpose as spacePurpose,
+			main_facility as mainFacility,
+			main_product as mainProduct,
+			max_people as maxPeople,
+			price,
+			filename
+		from space
+		join space_file using (space_no)
+		where del_yn like 'Y' and thumbnail = 'Y' 	
+	</select>
+	<select id="selectNoDelSpace" resultType="space">
+		select
+			space_no as spaceNo,
+			space_name as spaceName,
+			space_purpose as spacePurpose,
+			main_facility as mainFacility,
+			main_product as mainProduct,
+			max_people as maxPeople,
+			price,
+			filename
+		from space
+		join space_file using (space_no)
+		where del_yn like 'N' and thumbnail = 'Y' 	
+	</select>
+	<delete id="deleteRentalNo" parameterType="_int">
+		delete
+			from rental
+			where rental_no = #{rentalNo}
+	</delete>
+	<update id="cancleBlackList" parameterType="string">
+		update
+			set reading_black 
+			black_del ='Y'
+			where black_end=#{time1} and black_ty=1
+	</update>
+	<select id="selectDelBlack" resultType="kr.or.space.model.vo.Black">
+		select 
+        black_id as blackId,
+			count(*) as blackCount 
+		from reading_black
+        group by black_id	
+	</select>
+	<update id="spaceRestore" parameterType="_int">
+		update
+			space set 
+			del_yn = 'N'
+			where space_no = #{spaceNo} 
+	</update>	
+	<delete id="realDeleteSpace" parameterType="_int">
+		delete
+			from space
+			where space_no = #{spaceNo}
+	</delete>
+	<select id="selectBlackCount" parameterType="string" resultType="_int">
+		select 
+			count(*) as cnt 
+		from reading_black
+		where black_id = #{blackId} and black_ty=1
+	</select>
+	<select id="selectUbRentalNo" parameterType="_int" resultType="_int">
+		select
+			rental_no
+		from use_board
+		where ub_no = #{ubNo}
+	</select>
+	<update id="updateNoBoard" parameterType="_int">
+		update
+			rental set
+			used_board = 0
+		where rental_no = #{rentalNo}	
+	</update>
+</mapper>

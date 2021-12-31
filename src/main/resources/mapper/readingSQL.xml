@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="reading">
+	<select id="selectOneBlackList" parameterType="string" resultType="black">
+		select
+			black_no as blackNo,
+			black_start as blackStart,
+			black_end as blackEnd,
+			black_id as blackId,
+			black_ty as blackTy,
+			black_del as blackDel
+		from reading_black where black_id=#{readingId} and black_ty=0
+	</select>
+	<select id="selectOneNum" parameterType="reading" resultType="reading">
+		select
+			reading_no as readingNo,
+			reading_time as readingTime,
+			reading_day as readingDay,
+			reading_num as readingNum,
+			reading_id as readingId,
+			reading_name as readingName,
+			reading_ty as readingTy,
+			reading_checkout as readingCheckOut
+		from reading where reading_day=#{readingDay} and reading_num=#{readingNum} and reading_checkout = 0
+	</select>
+	<select id="selectOneId" parameterType="reading" resultType="reading">
+		select
+			reading_no as readingNo,
+			reading_time as readingTime,
+			reading_day as readingDay,
+			reading_num as readingNum,
+			reading_id as readingId,
+			reading_name as readingName,
+			reading_ty as readingTy,
+			reading_checkout as readingCheckOut
+		from reading where reading_day=#{readingDay} and reading_id=#{readingId} and reading_checkout = 0
+	</select>
+	<insert id="insertReading" parameterType="reading">
+		insert into reading
+			values(reading_seq.nextval,sysdate,#{readingDay},#{readingNum},#{readingId},(select member_name from member where member_id=#{readingId}),0,0)
+	</insert>
+	<delete id="reservationCancel" parameterType="reading">
+		delete from reading where reading_day=#{readingDay} and reading_id=#{readingId}
+	</delete>
+	<select id="countSeat" parameterType="string" resultType="_int">
+		select count(*) from reading where reading_day=#{readingDay} and reading_checkout = 0
+	</select>
+	<select id="chkSeat" parameterType="reading" resultType="_int">
+		<![CDATA[
+		select reading_num from reading where reading_day=#{readingDay} and reading_checkout = 0
+		]]> 
+	</select>
+	<select id="selectWeekReading" resultType="reading">
+		<![CDATA[
+		select
+			reading_no as readingNo,
+			reading_time as readingTime,
+			reading_day as readingDay,
+			reading_num as readingNum,
+			reading_id as readingId,
+			reading_name as readingName,
+			reading_ty as readingTy,
+			reading_checkout as readingCheckOut
+		from reading where reading_day >= TO_CHAR(SYSDATE-7,'YYYY-MM-DD')
+		]]> 
+	</select>
+	<update id="expulsion" parameterType="reading">
+		update reading set reading_checkout=2 where reading_day=#{readingDay} and reading_id=#{readingId}
+	</update>
+	<insert id="insertBlackList" parameterType="reading">
+		<![CDATA[
+		insert into reading_black 
+			values(reading_black_seq.nextval,to_char(sysdate,'yy/mm/dd hh24:mi:ss'),to_date(to_char(sysdate+8,'yymmdd'))||' 00:00:00',#{readingId},0,'N')
+		]]> 
+	</insert>
+	<update id="earlyOut" parameterType="reading">
+		update reading set reading_checkout=1 where reading_day=#{readingDay} and reading_id=#{readingId}
+	</update>
+	<select id="selectAllReading" resultType="reading">
+		select
+			reading_no as readingNo,
+			reading_time as readingTime,
+			reading_day as readingDay,
+			reading_num as readingNum,
+			reading_id as readingId,
+			reading_name as readingName,
+			reading_ty as readingTy,
+			reading_checkout as readingCheckOut
+		from reading
+	</select>
+	<select id="selectReadingBlackList" resultType="black">
+		select
+			black_start as blackStart,
+			black_end as blackEnd,
+			black_id as blackId,
+			member_name as memberName
+		from reading_black join member on reading_black.black_id = member.member_id where black_ty=0
+	</select>
+	<delete id="timeOutBlackList" parameterType="string">
+		delete from reading_black where black_end=#{time1} and black_ty=0
+	</delete>
+	<select id="selectMyReading" parameterType="string" resultType="reading">
+		select
+			reading_no as readingNo,
+			reading_time as readingTime,
+			reading_day as readingDay,
+			reading_num as readingNum,
+			reading_id as readingId,
+			reading_name as readingName,
+			reading_ty as readingTy,
+			reading_checkout as readingCheckOut
+		from reading where reading_id=#{memberId}
+	</select>
+	<insert id="fixturesInsert" parameterType="fixtures">
+		insert into fixtures values(fixtures_seq.nextval,#{readingNo},sysdate,#{fixturesDay},#{fixturesNum},#{fixturesId},(select member_name from member where member_id=#{fixturesId}),#{fixturesCharger},#{fixturesTable},#{fixturesBlanket})
+	</insert>
+	<select id="selectOneFixtures" parameterType="reading" resultType="fixtures">
+		select
+			fixtures_no as fixturesNo,
+			reading_no as readingNo,
+			fixtures_time as fixturesTime,
+			fixtures_day as fixturesDay,
+			fixtures_num as fixturesNum,
+			fixtures_id as fixturesId,
+			fixtures_name as fixturesName,
+			fixtures_charger as fixturesCharger,
+			fixtures_table as fixturesTable,
+			fixtures_blanket as fixturesBlanket
+		from fixtures where fixtures_day=#{readingDay} and fixtures_id=#{readingId}
+	</select>
+	<delete id="fixturesCancel" parameterType="reading">
+		delete from fixtures where fixtures_day=#{readingDay} and fixtures_id=#{readingId}
+	</delete>
+	<select id="selectReadingBlack" resultType="string">
+		select
+			black_id as blackId
+		from reading_black where black_ty=0
+	</select>
+	<delete id="deleteReading" parameterType="reading">
+		delete from reading where reading_id=#{readingId} and reading_day>sysdate
+	</delete>
+	<delete id="deleteRead">
+		delete from reading where reading_no=#{reserveNo}
+	</delete>
+	<delete id="fixturesAllCancel" parameterType="reading">
+		delete from fixtures where fixtures_id=#{readingId} and fixtures_day>sysdate
+	</delete>
+	<delete id="deleteFixtures">
+		delete from fixtures where reading_no=#{reserveNo}
+	</delete>
+	<select id="selectAllFixtures" resultType="fixtures">
+		select
+			fixtures_no as fixturesNo,
+			reading_no as readingNo,
+			fixtures_time as fixturesTime,
+			fixtures_day as fixturesDay,
+			fixtures_num as fixturesNum,
+			fixtures_id as fixturesId,
+			fixtures_name as fixturesName,
+			fixtures_charger as fixturesCharger,
+			fixtures_table as fixturesTable,
+			fixtures_blanket as fixturesBlanket
+		from fixtures
+	</select>
+</mapper>
+		
+

@@ -1,0 +1,83 @@
+.container>h1{
+    text-align: center;
+    margin-bottom: 30px;
+}
+.showList{
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+}
+.showInfo{
+    width: calc(80%/4);
+    text-align: center;
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column;
+    justify-content: space-between;
+    text-decoration: none;
+    margin: 25px 20px;
+    padding: 20px 0;
+    border: 2px solid #195083;
+    position: relative;
+}
+.poster{
+	width: 200px;
+    height: 280px;
+    border-radius: 10px;
+}
+.showInfo>div>h2{
+    color: #000000;
+    text-align: center;
+    font-size: 22px;
+}
+.showInfo>div>h4,p{
+    text-align: left;
+    padding-left: 17px;
+}
+.showInfo>div>p{
+	margin: 0;
+    color: #195083;
+}
+.showInfo:hover{
+	text-decoration: none;
+}
+.showInfo>div>h4{
+	color: #000;
+	font-size: 16px;
+}
+.showSearchBox{
+	margin-top:50px;
+}
+.sModal{
+    position: absolute;
+    top: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.showInfo:hover .sModal{
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.3);
+}
+.sModal>a{
+    position: absolute;
+    display: none;
+    background-color: #195083;
+    border-radius: 50px;
+    line-height: 75px;
+    text-decoration: none;
+    color: #fff;
+    font-size: 20px;
+    font-weight: 900;
+    border: 4px solid #fff;
+}
+.sModal>a:hover{
+	text-decoration: none;
+	color:#fff;
+}
+.showInfo:hover .sModal>a{
+    width: 80px;
+    height: 80px;
+    display: block;
+}

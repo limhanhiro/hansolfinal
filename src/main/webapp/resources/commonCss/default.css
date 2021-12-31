@@ -1,0 +1,272 @@
+@charset "UTF-8";
+@font-face {
+  font-family: "NotoSansKR";
+  src: local("NotoSansKR"), url(/resources/font/NotoSansKR-Regular.otf);
+}
+@font-face {
+  font-family: "d_i";
+  src: url(/resources/font/DMSerifDisplay-Italic.ttf);
+}
+@font-face {
+  font-family: "d_r";
+  src: url(/resources/font/DMSerifDisplay-Regular.ttf);
+}
+
+.header-title{
+    height: 300px;
+    width: 100%;
+	background-image: url("/resources/additionImage/시설.jpg");
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+.container{
+    width: 1170px;
+    margin: 0 auto;
+}
+body{
+    display: flex;
+    flex-direction: column;
+    font-family: "NotoSansKR";
+  	color:black;
+}
+.header-title img{
+    height: 300px;
+    overflow: hidden;
+
+}
+.h-left{
+    width: 70%;
+    float: left;
+    height: 150px;
+    background: rgba(0,0,0,.4);
+    background: -moz-linear-gradient(top, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0) 100%);
+    background: -webkit-linear-gradient(top, rgba(0,0,0,0.3) 0%,rgba(0,0,0,0) 100%);
+    background: linear-gradient(to bottom, rgba(0,0,0,0.3) 0%,rgba(0,0,0,0) 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#a6000000', endColorstr='#00000000',GradientType=0 );
+}
+.search-img {
+    width: auto;
+    height: auto;
+    max-width: 30px;
+    max-height: 50px;
+}
+.h-logo{
+    width: 20%;
+    text-align: center;
+    float: left;
+    height: 90px;
+}
+.h-logo>a{
+	text-decoration: none;
+	font-family: d_r; 
+    font-size:50px;
+    color:#fff;
+}
+.h-logo>a:hover{
+	text-decoration: none;
+	font-family: d_r; 
+    font-size:50px;
+    color:#fff;
+}
+.h-right{
+    width: 10%;
+    float: left;
+	height: 90px;
+}
+.h-right>a{
+	text-decoration: none;
+    color:#fff;
+}
+.h-right>a:hover {
+    text-decoration: none;
+    color:#BDB19A;
+}
+
+.container{
+	padding-top:70px;
+    flex:1;
+}
+#footer{
+    height: 500px;
+    width: 100%;
+    background-color: #041C32;
+    color: silver;
+  	margin-top : 100px;
+}
+
+.footer-menu{
+    height: 100px;
+    width: 100%;
+    border-bottom: solid 1px #bababa;
+}
+.footer-menu>a {
+    border:none;
+    font-size: 28px;
+    padding: 10px 40px 10px 40px;
+    color:#563D39;
+
+}
+
+.f-container {
+	position: relative;
+    margin: 0 auto;
+    width: 80%;
+}
+.f-con{
+  font-family: d_r; 
+  margin: 50px 0px 0px 180px;
+  float: left;
+}
+
+
+/*navi 진행중*/
+
+    /*navi 진행중*/
+
+.navi{
+    position: relative;
+    margin-top:10px;
+    z-index: 2;
+}
+.navi ul{
+	font-size:13px;
+    list-style-type: none;
+    padding: 0;
+    margin: 0 auto;
+    height: 150px;
+    width: 100%;
+    font-weight: 500;
+    color:rgba(86, 61, 57, 0.7);
+    text-shadow: 2px 2px 2px gray;
+    /*padding: 0 px 500px;*/
+}
+.navi>ul{
+	font-size:15px;
+    position: relative;
+    display:flex;
+    justify-content:center;
+}
+.navi ul>li{
+    width: 150px;
+    height: 50px;
+}
+.navi ul>li>a{
+    display: block;
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    line-height: 50px;            
+    text-decoration: none;
+}
+.navi>ul>li>a{
+    color : #fff;  
+}
+/* .navi>ul>li:hover>a{
+    font-weight: 900;
+    border-bottom: solid 2px #563D39;
+} */
+.sub>li>a{
+    color:rgba(255, 255, 255, 0.58);
+}
+.navi ul>li>a:first-child:after{
+    display:block;
+    position: absolute;
+    text-align: center;
+    content: '';
+    border-bottom: solid 2px #fff;
+    width: 150px;
+    transform: scaleX(0);  
+    transition: transform 250ms ease-in-out;
+}
+.navi ul>li>a:first-child:hover:after { 
+	font-weight: bold;
+    transform: scaleX(1); 
+}
+.navi>ul>li:hover>.sub{
+    display: block;
+
+}
+.sub>li>a:hover{
+    color:#fff;
+    text-style:bold;
+}
+.sub{
+    display: none;
+    position: absolute;
+    left:0;
+	background: rgba(0,0,0,.3);
+    background: -moz-linear-gradient(top, rgba(0,0,0,0.65) 0%, rgba(0,0,0,0) 100%);
+    background: -webkit-linear-gradient(top, rgba(0,0,0,0.3) 0%,rgba(0,0,0,0) 100%);
+    background: linear-gradient(to bottom, rgba(0,0,0,0.3) 0%,rgba(0,0,0,0) 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#a6000000', endColorstr='#00000000',GradientType=0 );
+	
+}
+.sub>li {
+	float: left;
+}
+
+.headerText{
+  display: inline-block;
+  text-decoration: none;
+  font-family: d_r; 
+  font-size:50px;
+  width: 100%;
+  color: #fff;
+  text-align: center;
+  margin: 0 auto;
+  animation: fadein 2s;
+  -moz-animation: fadein 2s; /* Firefox */
+  -webkit-animation: fadein 2s; /* Safari and Chrome */
+  -o-animation: fadein 2s; /* Opera */
+}
+@keyframes fadein {
+    from {
+        opacity:0;
+    }
+    to {
+        opacity:1;
+    }
+}
+@-moz-keyframes fadein { /* Firefox */
+    from {
+        opacity:0;
+    }
+    to {
+        opacity:1;
+    }
+}
+@-webkit-keyframes fadein { /* Safari and Chrome */
+    from {
+        opacity:0;
+    }
+    to {
+        opacity:1;
+    }
+}
+@-o-keyframes fadein { /* Opera */
+    from {
+        opacity:0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+.toTop{
+	opacity: 0.7;
+    cursor: pointer;
+    display: inline-block;
+	background-color: #195083;
+	color: #fff;
+	right: 125px;
+	bottom: 65px;
+	position: fixed;
+	width: 4em;
+    text-align: center;
+    height: 4em;
+    line-height: 4em;
+    border-radius: 50%;
+    font-size: 1em;
+    z-index: 3;
+    font-weight: 500;
+}

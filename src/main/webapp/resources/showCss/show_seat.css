@@ -1,0 +1,90 @@
+.title{
+	margin-top: 100px;
+	margin-bottom: 50px;
+	display: flex;
+	align-items: flex-end;
+}
+.title>h1{
+	margin-right:30px;
+}
+.floorWrapper{
+	width: 100%;
+    display: flex;
+    align-items: center;
+}
+.floor{
+    display: flex;
+    justify-content: center;
+    margin-right: 50px;
+}
+.row{
+    display: flex;
+    flex-wrap: wrap;
+}
+.firstCol>div{
+    justify-content: end;
+    padding-right: 25px;
+}
+.secondCol>div{
+    justify-content: center;
+    padding: 0 25px;
+}
+.thirdCol>div{
+    padding-left: 25px;
+}
+
+
+#seat {
+	 cursor: pointer;
+    background-color: #BDB19A;
+    font-weight: bold;
+    color: #fff;
+    width: 20px;
+    height: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 10%;
+    margin: 2.5px;
+}
+.seatDiv {
+    display: flex;
+    justify-content: center;
+}
+.seatDiv>div{
+	width: 30px;
+	height: 30px;
+	line-height: 30px;
+	font-weight: 900;
+	margin:0 2px;
+}
+.reservInfo{
+    width: 20%;
+    text-align: center;
+}
+.selectSeat{
+    width: 100%;
+    height: 200px;
+    border: 4px solid #195083;
+    box-sizing: border-box;
+    overflow: auto;
+    border-radius: 8px;
+}
+.selectSeat>h3{
+    margin: 5px 0;
+}
+.reservInfo>.btn{
+    margin-top: 10px;
+    width: 100%;
+}
+.stage{
+	margin-top:0;
+	margin-bottom: 20px;
+	width: 810px;
+	text-align: center;
+	border:4px solid #BDB19A;
+	color: #BDB19A;
+	font-weight: 900;
+	border-bottom-left-radius: 50px;
+	border-bottom-right-radius: 50px;  
+}

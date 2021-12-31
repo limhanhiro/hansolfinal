@@ -1,0 +1,19 @@
+
+.container-right{
+	height:570px;
+    display: flex;
+    justify-content: center;
+    align-items: center
+}
+.modal-body{
+	height:600px;
+}
+#datepicker>div>div{
+	height: 120px;
+}
+#datepicker>div>div>a{
+	padding: 40px 0;
+}
+#datepicker>div{
+	margin-top: 0;
+}

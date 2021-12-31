@@ -1,0 +1,108 @@
+.rental-img{
+	width: 200px;
+	height: 150px;
+}
+.table-box table tr th{
+	text-align: center;
+	background-color: #064663;
+	color: #ffffff;
+}
+.table-box table tr td{
+	text-align: center;
+	line-height: 247px;
+}
+.table-box{
+	line-height: 100%;
+	}
+.mBtn{
+	border : 1px solid #064663;
+	margin-top: 168px; 
+	background-color: #ffffff;
+	color : #064663;
+	border-radius: 10px;
+}
+.mBtn:hover{
+	background-color: #064663;
+	color: #ffffff;
+}
+.page-box{
+	text-align: center;
+}
+.space-box{
+	overflow: hidden;
+	margin: 0 auto;
+	margin-bottom: 100px;
+}
+.space-box p{
+	padding-bottom: 3px;
+	padding-left: 5px;
+}
+.choice{
+	margin-bottom: 30px;
+}
+.choice span{
+	margin-right: 30px;
+	font-size: 20px;
+}
+.noDel-space{
+	float: left;
+	border: 1px solid gray;
+	width: 30%;
+	height: 450px;
+	margin-left: 25px;
+	margin-bottom: 25px;
+	padding: 10px;
+}
+.del-space{
+	float: left;
+	border: 1px solid black;
+	width: 30%;
+	height: 450px;
+	margin-left: 25px;
+	margin-bottom: 25px;
+	padding: 10px;
+}
+#sL{
+	cursor: pointer;
+}
+#dL{
+	cursor: pointer;
+}
+.info-img{
+	width: 100%;
+	height: 200px;
+	margin-bottom: 30px;
+}
+.del-img{
+	width: 30px;
+	float: right;
+	margin-right: 10px;
+	cursor: pointer;
+}
+#btn{
+	float: right;
+	margin-right: 10px;
+}
+#btn{
+	border : 2px solid #064663;
+	background-color: #ffffff;
+	color: #064663;
+}
+#btn:hover{
+	border : 2px solid #e79b36;
+	background-color: #ffffff;
+	color: #e79b36;
+}
+.pagination>#click-page>a{
+	background-color: #064663; 	
+}	
+.t-hover:hover{
+	background-color: rgba(6, 71, 101, 0.1);
+}
+.table td{
+	border-bottom: 1px solid #064663;
+}
+.table th{
+	background-color: #064663;
+	color: white;
+}

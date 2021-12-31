@@ -1,0 +1,326 @@
+body{
+    display: flex;
+    flex-direction: column;
+    min-height: 200vh;
+    position: relative; 
+    z-index: 1;
+}
+/*스와이프*/
+.showslide{
+    position: relative;
+    margin: 0 auto;
+    margin-top: 100px;
+    height: auto;
+    width: 1465px;
+}
+.swiper {
+        width: 100%;
+        height: auto;
+      }
+      .swiper-slide {
+        display: block;
+        width: 250px;
+        height: 350px;
+        text-align: center;
+        font-size: 18px;
+        background: #fff;
+        /* Center slide text vertically */
+        display: -webkit-box;
+        display: -ms-flexbox;
+        display: -webkit-flex;
+        display: flex;
+        -webkit-box-pack: center;
+        -ms-flex-pack: center;
+        -webkit-justify-content: center;
+        justify-content: center;
+        -webkit-box-align: center;
+        -ms-flex-align: center;
+        -webkit-align-items: center;
+        align-items: center;
+      }
+      .swiper-slide img {
+        display: block;
+        width: auto;
+        height: 100%;
+        object-fit: cover;
+        position: relative;
+        overflow: hidden;
+      }
+      .cover{
+      		border:solid 1px #000;
+            position :absolute;
+            margin: auto;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.4);
+            transition-duration: 0.5s;
+            display: none;
+        }
+        .swiper-slide:hover>.cover{
+        display: block;
+        opacity: 1;
+      }
+      /*cover 안에있는 내용*/
+      .cover-content{
+      		padding: 70px 30px;
+            font-size: 16px;
+            color:#fff;
+        }
+        .reserve-button{
+            margin: auto;
+            height: 50px;
+            width: 50px;
+            border-radius:50%;
+            font-weight: bold;
+            color:#041C32;
+            background-color:#fff; 
+            text-align:center;
+        }
+        .reserve-button:hover{
+            background-color:#041C32; 
+            color:#fff;
+        }
+      /*1번슬라이드*/
+      .carousel-inner{
+        width: 100%;
+        height: 100%;
+      }
+
+      /*4번슬라이드*/
+      .up-on-scroll {
+        transition: all 0.7s;
+}
+
+
+    /*광고배너*/
+    .banner{
+    position: relative;
+    top:100px;
+    margin: 0 auto;
+    width: auto;
+    height: 200px;
+}
+    .banner img{
+    height: 200px;
+    width: auto;
+    }
+    .main-content{
+        display: flex;
+        padding-top: 100px;
+        top:50px;
+        width: 100%;
+        height: 500px;
+        margin: 0 auto;
+    }
+    .m-menu img{
+        width: 100%;
+        height: 100%;
+        max-height:500px ;
+    }
+    .m-menu {
+        flex: 1;
+        float: left;
+        height: 500px;
+        border: 1px solid #000;
+    }
+    .m-sub {
+        height: 50%;
+        width: 100%;
+    }
+
+
+
+
+    /*slick*/
+    .slider-for>div{
+        width: 100%;
+        height: 700px;
+        margin: 0 auto;
+    }
+    .d1 {
+        height: 515px;
+        z-index: 1;
+    }
+    .d2 {
+        display: flex;
+        width: 670px;
+        z-index: 3;
+        margin:0 auto;
+        z-index:3;
+    }
+    .sn{
+        margin: 15px;
+        height: 150px;
+        width: 70px;
+        overflow: hidden;
+    }
+    .sn img{
+        height: 100%;
+        width: auto;
+        max-width: 250px;
+    }
+    .sf img{
+    	margin: 0 auto;
+        height: 700px;
+        width: 100%;
+        z-index:3;
+    }
+    .slick-dots{
+        display: none;
+    }
+    .slick-arrow{
+        opacity: 0;
+    }
+    .sliderbg{
+        background-color: rgba(0,0,0,0.2);
+        width: 100%;
+        height: 185px;
+        z-index: 2;
+    }
+    .sf :hover{
+        display: block;
+
+    }
+
+    /*notice menu*/
+    .m-notice{
+        position: relative;
+        top: 200px;
+        width: 100%;
+        height: 800px;
+        padding: 60px 0px 60px 0px;
+    }
+    
+    .lnc-box{
+        font-size: 18px;
+        margin: 10px;
+        padding: 10px;
+		border: solid 1px #041C32; 
+		display: inline-block; 
+		width: 200px; 
+		height: 270px;
+		overflow: hidden; 
+    }
+    .notice-menu > li {
+        float: left;
+        width: 50%;
+        list-style: none;
+    }
+    .notice-menu{
+        padding: 0px 60px 0px 200px;
+    }
+	.ln-content > li {
+	    float:left;
+	}
+	.lnc-box >a{
+	    text-decoration: none;
+	    color:#000;
+	}
+	.tit-main .small:before {
+	    position: absolute;
+	    left: 0;
+	    top: 0;
+	    width: 37px;
+	    height: 1px;
+	    background: #474747;
+	    content: '';
+	}
+	.tit-main .small {
+	    display: block;
+	    position: relative;
+	    padding-top: 10px;
+	    font-size: 13px;
+	    letter-spacing: 0;
+	}
+	
+	.rpc-box{
+	    margin: 10px;
+		border: solid 1px #041C32; 
+		display: inline-block; 
+		width: 200px; 
+		height: 270px;
+		overflow: hidden; 
+		}
+	.rpc-box img{
+	    width: 200px;
+	    height: 270px;
+	}
+
+	
+	/*popup*/
+	 
+    .popup{
+        background-image: url("/resources/mainImage/upload/popbg.JPG");
+	    z-index:5;
+        position: absolute;
+        margin: 290px 0px 0px 135px;
+        height: 400px;
+        width: 400px;
+    }
+
+     
+    #pop_container{
+            font-family: 'NotoSans','맑은 고딕', 'Malgun Gothic',"돋움", dotum, arial, sans-serif;
+            text-align: center;
+            position: relative;
+        }
+    .top {
+        position: relative;
+        display: flex; 
+        justify-content: space-between;
+        padding: 0.5rem 1.4rem;
+        vertical-align: middle;
+    }
+    h1.infoTit {
+           border-bottom: solid 1px #ffffff; 
+            font-size: 15px; 
+            color:#ffffff;
+        }
+    main.textBox{
+        text-shadow: 2px 2px 2px #041C32;
+        color:#ffffff;
+        text-align: center;
+    }
+        h2.tit{
+            font-family: "d_r";
+            font-weight: bold;
+            line-height: 1.5em;
+        }
+        p {
+            line-height: 1.8em;
+        }
+        p.textContents{
+            font-size: 14px;
+            margin: 1.5em 1.8em;
+            font-weight: 200;
+        }
+
+    .popup footer {    
+        position: absolute;
+        bottom: 0;
+        width: 100%;
+    }
+    .popup footer.btnBox_todayClose {
+            padding: 0.5rem 0 0.7rem;
+            display: flex;
+            justify-content: flex-end;
+        }
+            form {padding-right: 2rem;}
+            input#chkday {
+                width: 17px;
+                height: 17px; 
+                vertical-align: middle;
+            }
+ 
+ .iconimg img{
+ 	padding-top: 15px;
+ 	display: block; 
+ 	margin: 0px auto;
+ }
+ .iconname{
+ 	padding-top:5px;
+ 	text-align: center;
+  	display: block; 
+  	margin: 0px auto;
+ 	color:#fff;
+ }

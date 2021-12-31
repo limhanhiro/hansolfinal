@@ -1,0 +1,67 @@
+
+    .topSide{
+        margin-bottom: 50px;
+    }
+    
+    .rightSide{
+        width: 850px;
+		display: inline-block;
+    }
+    .academyPhoto{
+        width: 400px;
+        height :300px;
+        display: inline-block;
+        margin: 0 auto;
+    }
+    .photo{
+        width :270px;
+        height :100%;
+        margin-left: 50px;
+     
+    }
+    .academySummary{
+         width: 380px;
+        height : 300px;
+        float: right;
+        
+        display: inline-block;
+    }
+    .bottomSide{
+        margin-top: 100px;
+        width: 850px;
+    }
+    .nav nav-tabs>li{
+        width: 70px;
+    }
+    .academySummary>table tr td:first-child{
+         width: 120px;
+         font-size: 18px;
+    }
+    .academySummary>table tr td{
+        height: 50px;
+    }
+    .academySummary>table{
+        width: 360px;
+        height: 250px;
+        margin: left 50px;
+        margin-top: 25px;
+        
+    }
+    .table-condensed{
+        border:none;
+    }
+     .leftSide{
+    	width: 290px;
+    	float: right;
+    	display: inline-block;
+    }
+    .fixed{
+    	position: fixed;
+    	margin-top: 30px;
+    	margin-left: 30px;
+    }
+    .middleSide{
+	border: 2px solid #064663;
+	border-radius: 10px;
+	padding: 20px 10px;
+}

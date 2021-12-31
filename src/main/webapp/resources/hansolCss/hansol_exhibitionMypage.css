@@ -1,0 +1,61 @@
+.table-box table tr th{
+	text-align: center;
+	background-color: #064663 ;
+	color: #ffffff;
+}
+.table-box table tr td{
+	text-align: center;
+}
+
+[name=srContent]{
+	width: 300px;
+	height: 100px;
+	margin: 10px;
+}
+.container{
+	
+}
+.mypage-title{
+	width: 500px;
+	display: inline-block;
+}
+.pop{
+	border: 1px solid #064663;
+	width: 400px;
+	margin-top: 15px;
+	margin-right : 50px;
+	padding : 5px;
+	float: right;
+	font-size: 13px;
+}
+.pop p:last-child {
+	color: red;
+}
+.pop span{
+	font-weight: bold;
+}
+.d-review{
+	display : inline-block;
+	cursor: pointer;
+}
+.writeBtn:hover{
+	transform: scale(1.2);
+  -webkit-transform: scale(1.2);
+  -moz-transform: scale(1.2);
+  -ms-transform: scale(1.2);
+  -o-transform: scale(1.2);
+}
+.writeBtn{
+	background-color: #064663 ;
+	color: white;
+	border: 1px solid white;
+	border-radius: 10px;
+	width: 60px;
+} 
+.updateBtn{
+	color: #A79078 ;
+	background-color: white;
+	border: 1px solid #064663; 
+	border-radius: 10px;
+}
+

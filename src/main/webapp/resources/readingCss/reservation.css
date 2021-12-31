@@ -1,0 +1,31 @@
+
+.main-title{
+	width:1170px;
+	border-bottom : 1px solid #d6d6d6;
+}
+.main-title>h1{
+	font-weight : 900;
+}
+.container-left>h2{
+	text-align: center;
+}
+.container-right{
+	height: 735px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+#datepicker{
+	display: flex;
+    justify-content: center;
+}
+#datepicker>div>div{
+	height: 120px;
+}
+#datepicker>div>div>a{
+	padding: 40px 0;
+}
+#datepicker>div{
+	margin-top: 0;
+}

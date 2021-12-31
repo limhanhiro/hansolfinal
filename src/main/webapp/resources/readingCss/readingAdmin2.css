@@ -1,0 +1,30 @@
+.chktd {
+	text-align: center;
+}
+
+#titlemenu>li>a {
+	border-radius: 0;
+	border-top: 1px solid black;
+	border-left: 1px solid black;
+	border-bottom: 1px solid black;
+	color: black;
+}
+
+#titlemenu>li:last-child>a {
+	border-right: 1px solid black;
+}
+
+#titlemenu>li.active>a {
+	background-color: black;
+	color: white;
+}
+
+#pagination>li:first-child>a {
+	border-top-left-radius: 0px;
+	border-bottom-left-radius: 0px;
+}
+
+#pagination>li:last-child>a {
+	border-top-right-radius: 0px;
+	border-bottom-right-radius: 0px;
+}

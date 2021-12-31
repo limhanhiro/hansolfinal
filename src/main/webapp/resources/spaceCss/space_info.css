@@ -1,0 +1,114 @@
+
+.item img{
+	width: 500px;
+	height: 300px;
+}
+.space-img{
+	width: 500px;
+	float: left;
+}
+.space-info{
+	width : 500px;
+	margin-left : 100px;
+	display: inline-block;
+}
+.space-info>table tr td:first-child{
+	text-align: center;
+	font-weight: bold;
+	font-size: 20px;
+}
+.space-info>table tr th{
+	width: 130px;
+}
+.rental-info{
+	display: inline-block;
+	margin-top : 20px;
+	margin-left: 100px;
+}
+.rental-info input{
+	border : none;
+	background-color: #ffffff;
+}
+.rental-info>table tr td:first-child{
+	width: 130px;
+}
+.rental-info>table tr td:last-child{
+	width: 200x;
+}
+.big-img{
+	margin-top : 100px;
+	text-align: center;
+}
+.info-img{
+	width: 1100px;
+	height : 500px;
+	margin-top : 20px;
+	text-align: center;
+}
+.carousel {
+	height : 500px;
+}
+.insert-btn{
+	border : 1px solid #064663; 
+	background-color : #ffffff;
+	width : 250px;
+	height : 40px;
+	margin-bottom : 10px;
+}
+.btn-box{
+	text-align: right;
+	margin-right: 150px;
+}
+#payment{
+	width: 300px;
+	border : 1px solid #064663;
+	color: #064663;
+}
+#payment:hover{
+	background-color: #064663; 
+	color: white;
+}
+.i-img{
+	width: 300px;
+}
+.review-box{
+	margin-top : 200px;
+	margin-left : 20px;
+}
+.review-table tr th{
+	width: 200px;
+}
+.review-table tr td{
+	width:600px;
+	height: 60px;
+	padding-left: 20px;
+}
+#date{
+	text-align: right;
+}
+.page-box{
+	text-align: center;
+}
+#content{
+	background-color: white; 
+}
+.review-table {
+	position: relative;
+	background: #064663;
+	border-radius: .4em;
+}
+
+.review-table:after {
+	content: '';
+	position: absolute;
+	left: 0;
+	top: 50%;
+	width: 0;
+	height: 0;
+	border: 38px solid transparent;
+	border-right-color: #064663;
+	border-left: 0;
+	border-bottom: 0;
+	margin-top: -19px;
+	margin-left: -38px;
+}

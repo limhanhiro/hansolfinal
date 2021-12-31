@@ -1,0 +1,88 @@
+.table-box table tr th{
+	text-align: center;
+	background-color: #064663 ;
+	color: #ffffff;
+}
+.table-bb table tr th{
+	text-align: center;
+	background-color: #064663 ;
+	color: #ffffff;
+}
+.table-box table tr td{
+	text-align: center;
+}
+.table-bb table tr td{
+	text-align: center;
+}
+[name=srContent]{
+	width: 100%;
+	height: 100px;
+	margin-top: 30px;
+}
+.container{
+	
+}
+.mypage-title{
+	width: 500px;
+	display: inline-block;
+}
+.pop{
+	border: 1px solid #e79b36;
+	width: 400px;
+	margin-top: 15px;
+	margin-right : 50px;
+	padding : 5px;
+	float: right;
+	font-size: 13px;
+}
+.pop p:last-child {
+	color: red;
+}
+.pop span{
+	font-weight: bold;
+}
+.d-review{
+	display : inline-block;
+	cursor: pointer;
+}
+.writeBtn{
+	width: 100px;
+}
+.writeBtn{
+	background-color: #064663;
+	color: white;
+	border: 1px solid white;
+	border-radius: 10px;
+	
+} .updateBtn{
+	color: #064663 ;
+	background-color: white;
+	border: 1px solid #e79b36; 
+	border-radius: 10px;
+	margin-top: 20px;
+	margin-left: 250px;
+}
+.update-Btn{
+	color: #064663 ;
+	background-color: white;
+	border: 1px solid #e79b36; 
+	border-radius: 10px;
+}
+#ckList{
+	color: #064663;
+	text-decoration: none;
+}
+#ckList:hover{
+	font-weight: bold;
+}
+#ub{
+	background: #064663;
+}
+.noRental{
+	margin-top : 100px;
+	text-align: center;
+}
+.no{
+	margin-top : 100px;
+	text-align: center;
+}

@@ -1,0 +1,62 @@
+	#title{
+	width:165px;
+	border-top: 7px solid #064663;
+	margin-top:70px;
+	margin-left:70px;
+	font-weight:700;
+	font-size: 40px;
+	margin-bottom: 20px;
+	}
+	#qnaTitle{
+	width:200px;
+	border-top: 7px solid #064663;
+	margin-top:70px;
+	margin-left:70px;
+	font-weight:700;
+	font-size: 40px;
+	margin-bottom:20px;
+	}
+	#freeTitle{
+	width:205px;
+	border-top: 7px solid #064663;
+	margin-top:70px;
+	margin-left:70px;
+	font-weight:700;
+	font-size: 40px;
+	margin-bottom:20px;
+	}
+	#event{
+	width:130px;
+	border-top: 7px solid #064663;
+	margin-top:70px;
+	margin-left:70px;
+	font-weight:700;
+	font-size: 40px;
+	margin-bottom: 20px;
+	}
+	#boardContent{
+	border: 1px white;
+	}
+	table input{
+	border: none;
+	}
+	#text{
+	border: none;
+	box-shadow: none;
+	}
+	.btnColor{
+	background-color: #064663;
+	color: white;
+	}
+	#btnColor:hover {
+	color: white;
+	}
+	#boardWriter{
+	width: 70px;
+	}
+	#back{
+	margin-bottom:20px;
+	float:right;
+	background-color:  #e79b36;
+	color: #fff;
+	}

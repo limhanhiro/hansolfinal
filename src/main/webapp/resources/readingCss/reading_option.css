@@ -1,0 +1,21 @@
+.container{
+}
+.main-title{
+	border-bottom : 1px solid #d6d6d6;
+}
+.main-title>h1{
+	font-weight : 900;
+}
+.info{
+	margin: 0 auto;
+	width:500px;
+	text-align: left;
+}
+.form-box{
+	display: flex;
+    justify-content: center;
+}
+.modal-form>div{
+	display: flex;
+    justify-content: center;
+}

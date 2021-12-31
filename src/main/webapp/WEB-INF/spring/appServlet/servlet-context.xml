@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans:beans xmlns="http://www.springframework.org/schema/mvc"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:beans="http://www.springframework.org/schema/beans"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:task="http://www.springframework.org/schema/task"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:websocket="http://www.springframework.org/schema/websocket"
+	xsi:schemaLocation="http://www.springframework.org/schema/websocket http://www.springframework.org/schema/websocket/spring-websocket-4.3.xsd
+		http://www.springframework.org/schema/mvc https://www.springframework.org/schema/mvc/spring-mvc.xsd
+		http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task-4.3.xsd
+		http://www.springframework.org/schema/beans https://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context https://www.springframework.org/schema/context/spring-context.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.3.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.3.xsd">
+
+	<!-- DispatcherServlet Context: defines this servlet's request-processing infrastructure -->
+	
+	<!-- Enables the Spring MVC @Controller programming model -->
+	<annotation-driven />
+
+	<!-- Handles HTTP GET requests for /resources/** by efficiently serving up static resources in the ${webappRoot}/resources directory -->
+	<resources mapping="/resources/**" location="/resources/" />
+
+	<!-- Resolves views selected for rendering by @Controllers to .jsp resources in the /WEB-INF/views directory -->
+	<beans:bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<beans:property name="prefix" value="/WEB-INF/views/" />
+		<beans:property name="suffix" value=".jsp" />
+	</beans:bean>
+	
+	<!-- DB 접속정보를 저장하는 dataSource객체 생성 -->
+	<beans:bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource">
+		<beans:property name="driverClassName" value="oracle.jdbc.driver.OracleDriver"/>
+		<beans:property name="url" value="jdbc:oracle:thin:@1.220.236.74:15213:xe"/>
+		<beans:property name="username" value="final"/>
+		<beans:property name="password" value="1234"/>
+	</beans:bean>
+	
+	<beans:bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+		<beans:property name="maxUploadSize" value="10485760"/>
+	</beans:bean>
+	
+	
+	<!-- Mybatis사용 객체 생성 -->
+	<beans:bean id="sqlSession" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<beans:property name="dataSource" ref="dataSource"/>
+		<beans:property name="mapperLocations" value="classpath:/mapper/**/*SQL.xml"/>
+		<beans:property name="configLocation" value="classpath:mybatis-config.xml"/>
+	</beans:bean>
+	<beans:bean id="sqlSessionTemplate" class="org.mybatis.spring.SqlSessionTemplate">
+		<beans:constructor-arg index="0" ref="sqlSession"/>
+	</beans:bean>
+	
+	<!-- 트랜잭션 관리용 객체 생성 -->
+	<beans:bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<beans:property name="dataSource" ref="dataSource"/>
+	</beans:bean>
+	<!-- 트랙잭션 어노테이션 사용을 위한 선언 -->
+	<tx:annotation-driven/>
+	
+	<!-- 웹소켓 전체채팅 객체 생성 -->
+	<!-- <beans:bean id="allMemberChat" class="kr.or.member.service.AllMemberChat"/>
+	쪽지 알람용 객체 생성
+	<beans:bean id="alarm" class="kr.or.common.Alarm"/>
+	웹소켓 설정
+	<websocket:handlers>
+		<websocket:mapping handler="allMemberChat" path="/chat.do"/>
+		<websocket:mapping handler="alarm" path="/alarm.do"/>
+	</websocket:handlers> -->
+	
+	<!-- AOP 어노테이션방식 사용 선언 -->
+	<aop:aspectj-autoproxy/>
+	<!-- 예약작업 어노테이션방식 사용 선언 -->
+	<task:annotation-driven/>
+	
+	<context:component-scan base-package="kr.or.iei" />
+	<context:component-scan base-package="show" />
+	<context:component-scan base-package="kr.or.space" />	
+	<context:component-scan base-package="kr.or.addition"/>
+	<context:component-scan base-package="kr.or.member" />
+	<context:component-scan base-package="kr.or.exhibition"/>
+	<context:component-scan base-package="kr.or.resume"/>
+	<context:component-scan base-package="kr.or.requrit"/>
+	<context:component-scan base-package="kr.or.reading"/>
+	<context:component-scan base-package="kr.or.academy"/>
+	
+</beans:beans>

@@ -1,0 +1,235 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="exhibition">
+	<insert id="exhibitionInsert" parameterType="exb">
+		insert 
+			into exhibition
+			values(exhibition_seq.nextval,#{exhibitionTitle},#{exhibitionStart},
+			#{exhibitionEnd},#{exhibitionPhoto},#{exhibitionTimeStart},#{exhibitionTimeEnd},#{exhibitionAge},
+			#{exhibitionPrice},#{exhibitionDetail},0)
+	</insert>
+	<select id="selectOneExhibition" parameterType="_int" resultType="exb">
+		select 
+			exhibition_no as exhibitionNo,
+			exhibition_title as exhibitionTitle,
+			exhibition_start as exhibitionStart,
+			exhibition_end as exhibitionEnd,
+			exhibition_photo as exhibitionPhoto,
+			exhibition_time_start as exhibitionTimeStart,
+			exhibition_time_end as exhibitionTimeEnd,
+			exhibition_age as exhibitionAge,
+			exhibition_price as exhibitionPrice,
+			exhibition_detail as exhibitionDetail,
+			exhibition_cancel as exhibitionCancel
+		from exhibition where exhibition_no = #{exhibitionNo} 
+	</select>
+	<insert id="exhibitionCredit" parameterType="exbp">
+		insert
+			into payment
+			values(#{paymentNo},#{paymentSelect},0,#{exhibitionNo},#{paymentPrice},
+			to_char(sysdate,'YYYY-MM-DD'),0,#{paymentQuantity},#{bookDate},#{memberNo},0)
+	</insert>
+	<select id="exhibitionTotal" resultType="_int">
+		select count(*) from exhibition where exhibition_cancel=0 and exhibition_end > sysdate
+	</select>
+	<select id="exhibitionList" parameterType="ep" resultType="exb">
+		select 
+  			nn.exhibition_no as exhibitionNo,
+  			nn.exhibition_title as exhibitionTitle,
+  			nn.exhibition_start as exhibitionStart,
+  			nn.exhibition_end as exhibitionEnd,
+  			nn.exhibition_photo as exhibitionPhoto,
+  			nn.exhibition_time_start as exhibitionTimeStart,
+  			nn.exhibition_time_end as exhibitionTimeEnd,
+  			nn.exhibition_age as exhibitionAge,
+  			nn.exhibition_price as exhibitionPrice,
+  			nn.exhibition_detail as exhibitionDetail,
+  			nn.exhibition_cancel as exhibitionCancel
+  		from (select rownum as rnum,n.* from(select * from  exhibition where exhibition_cancel=0 and exhibition_end > sysdate order by exhibition_no desc)n)nn where rnum between  #{start} and #{end}
+	</select>
+	<insert id="insertExReview" parameterType="exr">
+		insert into exhibition_review values(exhibition_review_seq.nextval, #{exhibitionNo}, #{exReviewWriter}, #{exReviewContent}, #{exReviewStar}, to_char(sysdate, 'yyyy-mm-dd'),0)
+	</insert>
+	<update id="deleteExReview" parameterType="exr">
+		update exhibition_review set ex_review_status=1 where ex_review_no=#{exReviewNo}
+	</update>
+	<update id="updateExReveiw" parameterType="exr">
+		update exhibition_review set ex_review_content=#{exReviewContent} where ex_review_no=#{exReviewNo}
+	</update>
+	<select id="selectExReviewList" parameterType="_int" resultType="exr">
+		select
+			ex_review_no as exReviewNo,
+			exhibition_no as exhibitionNo,
+			ex_review_writer as exReviewWriter,
+			ex_review_content as exReviewContent,
+			ex_review_star as exReviewStar,
+			ex_review_date as exReviewDate,
+			ex_review_status as exReviewStatus
+		from exhibition_review where exhibition_no=#{getExhibitionNo} and ex_review_status = 0 order by 1 desc
+	</select>
+	<select id="selectAvgStar" parameterType="_int" resultType="_double">
+		select 
+			round(nvl(avg(ex_review_star),0),1) from exhibition_review 
+		where exhibition_no = #{exhibitionNo} and ex_review_status = 0
+	</select>
+	<update id="exhibitionUpdate" parameterType="exb">
+		update exhibition set exhibition_title = #{exhibitionTitle}, exhibition_start = #{exhibitionStart}, exhibition_end = #{exhibitionEnd}, exhibition_photo = #{exhibitionPhoto},
+		exhibition_time_start = #{exhibitionTimeStart}, exhibition_time_end = #{exhibitionTimeEnd}, exhibition_age=#{exhibitionAge}, exhibition_detail=#{exhibitionDetail}
+		where exhibition_no = #{exhibitionNo}
+	</update>
+	<select id="selectExhibitionAdmin"  resultType="exb">
+		select 
+			exhibition_no as exhibitionNo,
+			exhibition_title as exhibitionTitle,
+			exhibition_start as exhibitionStart,
+			exhibition_end as exhibitionEnd,
+			exhibition_photo as exhibitionPhoto,
+			exhibition_time_start as exhibitionTimeStart,
+			exhibition_time_end as exhibitionTimeEnd,
+			exhibition_age as exhibitionAge,
+			exhibition_price as exhibitionPrice,
+			exhibition_detail as exhibitionDetail,
+			exhibition_cancel as exhibitionCancel
+		from exhibition where exhibition_end >=  to_char(sysdate, ('yyyy-mm-dd')) and exhibition_cancel = 0 order by 1 desc
+	</select>
+	<select id="selectExhibitionAdminLast"  resultType="exb">
+	<![CDATA[
+		select 
+			exhibition_no as exhibitionNo,
+			exhibition_title as exhibitionTitle,
+			exhibition_start as exhibitionStart,
+			exhibition_end as exhibitionEnd,
+			exhibition_photo as exhibitionPhoto,
+			exhibition_time_start as exhibitionTimeStart,
+			exhibition_time_end as exhibitionTimeEnd,
+			exhibition_age as exhibitionAge,
+			exhibition_price as exhibitionPrice,
+			exhibition_detail as exhibitionDetail,
+			exhibition_cancel as exhibitionCancel
+		from exhibition where exhibition_end < to_char(sysdate, ('yyyy-mm-dd')) and exhibition_cancel = 0 order by 1 desc
+	]]>	
+	</select>
+	<select id="selectExhibitionAdminCancel"  resultType="exb">
+		select 
+			exhibition_no as exhibitionNo,
+			exhibition_title as exhibitionTitle,
+			exhibition_start as exhibitionStart,
+			exhibition_end as exhibitionEnd,
+			exhibition_photo as exhibitionPhoto,
+			exhibition_time_start as exhibitionTimeStart,
+			exhibition_time_end as exhibitionTimeEnd,
+			exhibition_age as exhibitionAge,
+			exhibition_price as exhibitionPrice,
+			exhibition_detail as exhibitionDetail,
+			exhibition_cancel as exhibitionCancel
+		from exhibition where exhibition_cancel = 1 order by 1 desc
+	</select>
+	<select id="checkTotalCount" parameterType="hashmap" resultType="_int">
+		select nvl(sum(payment_quantity),0) from payment where exhibition_no=#{exhibitionNo} and book_date=#{exhibitionDate} and payment_cancel = 0
+	</select>
+	<select id="selectExhibitionPayment" parameterType="_int" resultType="exbpm">
+		select 
+			payment_no as paymentNo,
+			payment_select as paymenySelect,
+			academy_no as academyNo,
+			exhibition_no as exhibitionNo,
+			payment_price as paymentPrice,
+			payment_date as paymentDate,
+			payment_cancel as paymentCancel,
+			payment_quantity as paymentQuantity,
+			book_date as bookDate,
+			member_no as memberNo,
+			check_email as checkEmail,
+			exhibition_title as exhibitionTitle,
+            exhibition_start as exhibitionStart,
+            exhibition_end as exhibitionEnd,
+            exhibition_time_start as exhibitionTimeStart,
+            exhibition_time_end as exhibitionTimeEnd
+		from payment join exhibition using(exhibition_no) where member_no=#{memberNo} and payment_select = 1  and book_date >= to_char(sysdate, ('yyyy-mm-dd'))   order by payment_date desc
+	</select>
+	<select id="selectExhibitionPaymenytLast" parameterType="_int" resultType="exbpm">
+	<![CDATA[
+		select 
+			payment_no as paymentNo,
+			payment_select as paymenySelect,
+			academy_no as academyNo,
+			exhibition_no as exhibitionNo,
+			payment_price as paymentPrice,
+			payment_date as paymentDate,
+			payment_cancel as paymentCancel,
+			payment_quantity as paymentQuantity,
+			book_date as bookDate,
+			member_no as memberNo,
+			check_email as checkEmail,
+			exhibition_title as exhibitionTitle,
+            exhibition_start as exhibitionStart,
+            exhibition_end as exhibitionEnd,
+            exhibition_time_start as exhibitionTimeStart,
+            exhibition_time_end as exhibitionTimeEnd
+		from payment join exhibition using(exhibition_no) where member_no=#{memberNo} and payment_select = 1  and book_date < to_char(sysdate, ('yyyy-mm-dd'))   order by payment_date desc
+	]]>	
+	</select>
+	<update id="deletePayment" parameterType="_int">
+		update payment set payment_cancel = 1 where payment_no = #{paymentNo}
+	</update>
+	<select id="paymentList" parameterType="_int" resultType="exbp">
+	select 
+			payment_no as paymentNo,
+			payment_select as paymenySelect,
+			academy_no as academyNo,
+			exhibition_no as exhibitionNo,
+			payment_price as paymentPrice,
+			payment_date as paymentDate,
+			payment_cancel as paymentCancel,
+			payment_quantity as paymentQuantity,
+			book_date as bookDate,
+			member_no as memberNo,
+			check_email as checkEmail
+		from payment where payment_select = 1  and exhibition_no = #{exhibitionNo}
+	</select>
+	<delete id="realDelete" parameterType="_int">
+		delete from payment where payment_no = #{reserveNo}
+	</delete>
+	<update id="updateEmailStatus" parameterType="_int">
+		update payment set check_email = 1 where payment_no = #{paymentNo}
+	</update>
+	<select id="selectOneExhibitionPayment" parameterType="_int" resultType="exbpm">
+		select 
+			payment_no as paymentNo,
+			payment_select as paymenySelect,
+			academy_no as academyNo,
+			exhibition_no as exhibitionNo,
+			payment_price as paymentPrice,
+			payment_date as paymentDate,
+			payment_cancel as paymentCancel,
+			payment_quantity as paymentQuantity,
+			book_date as bookDate,
+			member_no as memberNo,
+			check_email as checkEmail,
+			exhibition_title as exhibitionTitle,
+            exhibition_start as exhibitionStart,
+            exhibition_end as exhibitionEnd,
+            exhibition_time_start as exhibitionTimeStart,
+            exhibition_time_end as exhibitionTimeEnd
+		from payment join exhibition using(exhibition_no) where payment_no=#{paymentNo} and payment_select = 1
+	</select>
+	<update id="deleteExhibition" parameterType="_int">
+		update exhibition set  exhibition_cancel = 1 where exhibition_no = #{exhibitioinNo}
+	</update>
+	<update id="updatePaymentStatus" parameterType="_int">
+		update payment set  payment_cancel = 2 where exhibition_no = #{exhibitioinNo} and payment_cancel = 0 and book_date > sysdate
+	</update>
+	<update id="revivalExhibition" parameterType="_int">
+		update exhibition set  exhibition_cancel = 0 where exhibition_no = #{exhibitioinNo}
+	</update>
+	<select id="refundMemberView" parameterType="_int" resultType="exbrf">
+		select 
+			payment_no as paymentNo,
+            member_name as memberName,
+            member_email as memberEmail
+		from payment join member using(member_no) where payment_cancel= 2 and payment_select = 1  and exhibition_no =#{exhibitionNo}
+	</select>
+	<select id="countCancelQuanEx" parameterType="_int" resultType="_int">
+		select count(*) from payment where exhibition_no= #{exhibitionNo} and payment_cancel = 0
+	</select>
+</mapper>
